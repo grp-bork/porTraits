@@ -17,6 +17,6 @@ process gtdbtk_classify {
 		gzip -vc ${genome_fasta} > genomes/${sample_id}.fna.gz
 	fi
 
-    gtdbtk classify_wf --cpus ${task.cpus} --pplacer_cpus ${task.cpus} --genome_dir ./genomes --out_dir ${sample_id} --extension .fna.gz
+    gtdbtk classify_wf --mash_db ./mash.db --cpus ${task.cpus} --pplacer_cpus ${task.cpus} --genome_dir ./genomes --out_dir ${sample_id} --extension .fna.gz
     """
 }
