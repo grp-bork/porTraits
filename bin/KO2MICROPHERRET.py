@@ -1,20 +1,5 @@
 #!/usr/bin/env python3
 
-# Patch sklearn tree NODE_DTYPE for compatibility with models pickled under older sklearn
-import numpy as np
-import sklearn.tree._tree as _tree
-# Patch sklearn tree NODE_DTYPE for compatibility with models pickled under older sklearn
-_tree.TREE_DTYPE = np.dtype({
-    'names': [
-        'left_child', 'right_child', 'feature', 'threshold',
-        'impurity', 'n_node_samples', 'weighted_n_node_samples',
-        'missing_go_to_left'
-    ],
-    'formats': ['<i8', '<i8', '<i8', '<f8', '<f8', '<i8', '<f8', 'u1'],
-    'offsets': [0, 8, 16, 24, 32, 40, 48, 56],
-    'itemsize': 64
-})
-
 import os
 import sys
 import argparse
