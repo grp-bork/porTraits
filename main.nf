@@ -3,6 +3,8 @@ include { gtdbtk_classify } from "./portrait/modules/gtdbtk"
 include { genomespot } from "./portrait/modules/genomespot"
 include { eggnog_mapper; emapper2matrix } from "./portrait/modules/eggnog_mapper"
 include { micropherret } from "./portrait/modules/micropherret"
+include { bacdive_ai } from "./portrait/modules/bacdive"
+include { traitar } from "./portrait/modules/traitar"
 
 params.file_pattern = "**.{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}"
 
@@ -26,8 +28,8 @@ workflow {
 	eggnog_mapper(recognise_genome.out.proteins, params.eggnog_db)
 	emapper2matrix(eggnog_mapper.out.eggnog, params.pfam_clade_map)
 
-	micropherret(emapper2matrix.out.ko_matrix, params.micropherret_models)
-
-
+	// micropherret(emapper2matrix.out.ko_matrix, params.micropherret_models)
+	// bacdive_ai(emapper2matrix.out.pfam_matrix, params.bacdive_ai_models)
+	// traitar(emapper2matrix.out.pfam_matrix, params.traitar_models)
 
 }
