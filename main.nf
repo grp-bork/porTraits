@@ -1,8 +1,8 @@
 include { recognise_genome } from "./portrait/modules/recognise"
-// include { prodigal } from "./portrait/modules/prodigal"
 include { gtdbtk_classify } from "./portrait/modules/gtdbtk"
 include { genomespot } from "./portrait/modules/genomespot"
 include { eggnog_mapper; emapper2matrix } from "./portrait/modules/eggnog_mapper"
+include { micropherret } from "./portrait/modules/micropherret"
 
 params.file_pattern = "**.{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}"
 
@@ -26,7 +26,8 @@ workflow {
 	eggnog_mapper(recognise_genome.out.proteins, params.eggnog_db)
 	emapper2matrix(eggnog_mapper.out.eggnog, params.pfam_clade_map)
 
-	// prodigal(genomes_ch)
+	micropherret(emapper2matrix.out.ko_matrix, params.micropherret_models)
+
 
 
 }
