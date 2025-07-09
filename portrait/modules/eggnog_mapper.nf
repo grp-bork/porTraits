@@ -7,11 +7,11 @@ process eggnog_mapper {
 	memory {64.GB * task.attempt}
 
 	input:
-	tuple val(speci), val(genome_id), path(proteins)
+	val(genome_id), path(proteins)
 	path(eggnog_db)
 
 	output:
-	tuple val(speci), val(genome_id), path("${speci}/${genome_id}/${genome_id}.emapper.annotations"), emit: eggnog
+	tuple val(genome_id), path("${speci}/${genome_id}/${genome_id}.emapper.annotations"), emit: eggnog
 
 	script:
 	// mkdir eggnog_db_copy
