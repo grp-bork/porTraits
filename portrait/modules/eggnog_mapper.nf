@@ -27,3 +27,19 @@ process eggnog_mapper {
 	"""
 	// rm -rvf eggnog_db_copy
 }
+
+
+process emapper2matrix {
+	tag "${genome_id}"
+
+	input:
+	tuple value(genome_id), path(emapper_output)
+	path(pfam_clade_map)
+
+	script:
+	"""
+	mkdir -p e2m/${genome_id}
+	emapper2matrix.py --input-file ${emapper_output} --pfam-map-file ${pfam_clade_map} --outdir e2m/${genome_id}
+	"""
+
+}

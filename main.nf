@@ -24,6 +24,7 @@ workflow {
 	// genomespot(genomespot_input_ch)
 
 	eggnog_mapper(recognise_genome.out.proteins, params.eggnog_db)
+	emapper2matrix(eggnog_mapper.out.eggnog, params.pfam_clade_map)
 
 	// prodigal(genomes_ch)
 
