@@ -1,5 +1,5 @@
 process eggnog_mapper {
-	container "quay.io/biocontainers/eggnog-mapper:2.1.12--pyhdfd78af_0"
+	// container "quay.io/biocontainers/eggnog-mapper:2.1.12--pyhdfd78af_0"
 	label "eggnog_mapper"
 	tag "${genome_id}"
 	cpus 16
@@ -23,7 +23,7 @@ process eggnog_mapper {
 	mkdir -p ${speci}/${genome_id}/
 	
 
-	emapper.py -i ${proteins} --data_dir ${eggnog_db} --output ${speci}/${genome_id}/${genome_id} -m diamond --cpu $task.cpus --dmnd_algo 0
+	emapper.py -i ${proteins} --data_dir ${eggnog_db} --output ${speci}/${genome_id}/${genome_id} -m diamond --cpu $task.cpus --dmnd_algo 0 --pfam_realign realign
 	"""
 	// rm -rvf eggnog_db_copy
 }
