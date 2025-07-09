@@ -36,6 +36,10 @@ process emapper2matrix {
 	tuple val(genome_id), path(emapper_output)
 	path(pfam_clade_map)
 
+	output:
+	tuple val(genome_id), path("e2m/${genome_id}/*.KEGG_ko.tsv.gz"), emit: ko_matrix, optional: true
+	tuple val(genome_id), path("e2m/${genome_id}/*.PFAMs.tsv.gz"), emit: pfam_matrix, optional: true
+
 	script:
 	"""
 	mkdir -p e2m/${genome_id}
