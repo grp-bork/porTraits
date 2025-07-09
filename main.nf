@@ -28,8 +28,8 @@ workflow {
 	eggnog_mapper(recognise_genome.out.proteins, params.eggnog_db)
 	emapper2matrix(eggnog_mapper.out.eggnog, params.pfam_clade_map)
 
-	// micropherret(emapper2matrix.out.ko_matrix, params.micropherret_models)
-	// bacdive_ai(emapper2matrix.out.pfam_matrix, params.bacdive_ai_models)
-	// traitar(emapper2matrix.out.pfam_matrix, params.traitar_models)
+	micropherret(emapper2matrix.out.ko_matrix, params.micropherret_models)
+	bacdive_ai(emapper2matrix.out.pfam_matrix, params.bacdive_ai_models)
+	traitar(emapper2matrix.out.pfam_matrix, params.traitar_models)
 
 }
