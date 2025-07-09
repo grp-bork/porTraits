@@ -14,7 +14,7 @@ workflow {
             return tuple(genome_id, fasta)
         }
 
-	gtdbtk_classify(genomes_ch)
+	gtdbtk_classify(genomes_ch, params.gtdbtk_data)
 	recognise_genome(genomes_ch, params.recognise_marker_genes)
 	// prodigal(genomes_ch)
 

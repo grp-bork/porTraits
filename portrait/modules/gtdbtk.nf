@@ -3,6 +3,7 @@ process gtdbtk_classify {
 
     input:
     tuple val(sample_id), path(genome_fasta)
+    path(gtdbtk_data)
 
     output:
     path("${sample_id}", maxDepth: '2')
