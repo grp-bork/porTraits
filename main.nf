@@ -23,7 +23,7 @@ workflow {
 
 	// genomespot(genomespot_input_ch)
 
-	eggnog_mapper(recognise_genome.out.proteins, params.emapper_db)
+	eggnog_mapper(recognise_genome.out.proteins, params.eggnog_db)
 
 	// prodigal(genomes_ch)
 
