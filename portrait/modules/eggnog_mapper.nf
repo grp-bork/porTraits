@@ -11,7 +11,7 @@ process eggnog_mapper {
 	path(eggnog_db)
 
 	output:
-	tuple val(genome_id), path("${speci}/${genome_id}/${genome_id}.emapper.annotations"), emit: eggnog
+	tuple val(genome_id), path("${genome_id}/${genome_id}.emapper.annotations"), emit: eggnog
 
 	script:
 	// mkdir eggnog_db_copy
@@ -20,10 +20,10 @@ process eggnog_mapper {
 	// ln -sf \$(readlink eggnog_db)/eggnog.taxa.db.traverse.pkl eggnog_db_copy/
 	// cp -v eggnog_db/eggnog.db eggnog_db_copy/
 	"""
-	mkdir -p ${speci}/${genome_id}/
+	mkdir -p ${genome_id}/
 	
 
-	emapper.py -i ${proteins} --data_dir ${eggnog_db} --output ${speci}/${genome_id}/${genome_id} -m diamond --cpu $task.cpus --dmnd_algo 0 --pfam_realign realign
+	emapper.py -i ${proteins} --data_dir ${eggnog_db} --output ${genome_id}/${genome_id} -m diamond --cpu $task.cpus --dmnd_algo 0 --pfam_realign realign
 	"""
 	// rm -rvf eggnog_db_copy
 }
