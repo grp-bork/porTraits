@@ -7,7 +7,7 @@ process eggnog_mapper {
 	memory {64.GB * task.attempt}
 
 	input:
-	val(genome_id), path(proteins)
+	tuple val(genome_id), path(proteins)
 	path(eggnog_db)
 
 	output:
