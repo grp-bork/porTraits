@@ -33,7 +33,7 @@ process emapper2matrix {
 	tag "${genome_id}"
 
 	input:
-	tuple value(genome_id), path(emapper_output)
+	tuple val(genome_id), path(emapper_output)
 	path(pfam_clade_map)
 
 	script:
