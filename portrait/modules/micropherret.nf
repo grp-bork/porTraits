@@ -3,6 +3,7 @@ process micropherret {
 
 	input:
 	tuple val(genome_id), path(ko_matrix)
+	path(micropherret_models)
 
 	script:
 	"""
