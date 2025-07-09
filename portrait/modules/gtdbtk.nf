@@ -13,7 +13,7 @@ process gtdbtk_classify {
     mkdir ${sample_id} genomes
 
     if [[ "${genome_fasta}" == *".gz" ]]; then
-		ln -sf ${genome_fasta} genomes/${sample_id}.fna.gz
+		ln -sf ../${genome_fasta} genomes/${sample_id}.fna.gz
 	else
 		gzip -vc ${genome_fasta} > genomes/${sample_id}.fna.gz
 	fi
