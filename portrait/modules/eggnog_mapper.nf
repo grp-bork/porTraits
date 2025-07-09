@@ -23,8 +23,9 @@ process eggnog_mapper {
 	mkdir -p ${genome_id}/
 	
 
-	emapper.py -i ${proteins} --data_dir ${eggnog_db} --output ${genome_id}/${genome_id} -m diamond --cpu $task.cpus --dmnd_algo 0 --pfam_realign realign
+	emapper.py -i ${proteins} --data_dir ${eggnog_db} --output ${genome_id}/${genome_id} -m diamond --cpu $task.cpus --dmnd_algo 0
 	"""
+	// --pfam_realign realign
 	// rm -rvf eggnog_db_copy
 }
 
