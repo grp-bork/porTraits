@@ -5,12 +5,12 @@ process traitar {
 
 	input:
 	tuple val(genome_id), path(pfam_matrix)
-	path(traitar_models)
+	path("traitar_models")
 
 	script:
 	"""
 	mkdir -p traitar/${genome_id}/
-	PFAM2Traitar.py --pfam-matrix ${pfam_matrix} --model-dir ${traitar_models} --outdir traitar/${genome_id} --voters ${params.traitar_nvoters}
+	PFAM2Traitar.py --pfam-matrix ${pfam_matrix} --model-dir traitar_models --outdir traitar/${genome_id} --voters ${params.traitar_nvoters}
 	"""
 
 }
