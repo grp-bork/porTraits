@@ -5,6 +5,7 @@ process traitar {
 
 	input:
 	tuple val(genome_id), path(pfam_matrix)
+	path(traitar_models)
 
 	script:
 	"""
