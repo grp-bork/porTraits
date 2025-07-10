@@ -23,7 +23,7 @@ workflow {
 	genomespot_input_ch = genomes_ch
 		.join(recognise_genome.out.proteins, by: 0)
 
-	// genomespot(genomespot_input_ch)
+	genomespot(genomespot_input_ch, params.genomespot_models)
 
 	eggnog_mapper(recognise_genome.out.proteins, params.eggnog_db)
 	emapper2matrix(eggnog_mapper.out.eggnog, params.pfam_clade_map)
