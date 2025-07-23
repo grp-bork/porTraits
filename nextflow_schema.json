@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/grp-bork/reCOGnise/main/nextflow_schema.json",
+  "title": "porTraits nextflow schema",
+  "description": "porTraits predicts microbial phenotypic traits based on genomic content of input prokaryotic genomes.",
+  "type": "object",
+  "definitions": {
+    "required": {
+      "title": "Input/Output Parameters",
+      "type": "object",
+      "description": "",
+      "default": "",
+      "properties": {
+        "input_dir": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Directory path to genome fasta files"
+        },        
+        "output_dir": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Directory path to output files"
+        },
+        "marker_db": {
+          "type": "string",
+          "description": "Directory path to COG markers",
+          "hidden": true,
+          "default": "/vol/data/databases/clowm/CLDB-0190075fa6117f75add6ee173932d013/0190075fa6167724af18e616a3728332"
+        },
+        "gtdbtk_data": {
+          "type": "string",
+          "description": "Directory path to GTDB database",
+          "help_text": "This should be the root directory of the GTDB database",
+          "hidden": true,
+          "default": "/vol/data/databases/clowm/CLDB-018e12ef116275458ea149715133b0ec/latest/release214"
+        }
+      },
+      "required": ["output_dir", "input_dir", "marker_db", "gtdbtk_data"]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/definitions/required"
+    }
+  ]
+}
