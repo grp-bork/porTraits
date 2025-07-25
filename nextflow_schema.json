@@ -21,7 +21,7 @@
           "format": "directory-path",
           "description": "Directory path to output files"
         },
-        "marker_db": {
+        "marker_genes_db": {
           "type": "string",
           "description": "Directory path to COG markers",
           "hidden": true,
@@ -42,7 +42,7 @@
           "default": "/vol/data/databases/clowm/CLDB-019837cec3377dd58298a00a9328680c/019837cec33b74a9b7beaa1872ef1600/"
         }        
       },
-      "required": ["output_dir", "input_dir", "marker_db", "gtdbtk_data", "metatraits_models"]
+      "required": ["output_dir", "input_dir", "marker_genes_db", "gtdbtk_data", "metatraits_models"]
     }
   },
   "allOf": [
