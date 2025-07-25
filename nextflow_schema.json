@@ -46,7 +46,7 @@
           "description": "Directory path to the eggNOG database",
           "help_text": "This should be the root directory of the GTDB database",
           "hidden": true,
-          "default": "/vol/data/databases/clowm/CLDB-018e846affa774508716ac5b5a20386e/"
+          "default": "/vol/data/databases/clowm/CLDB-018e846affa774508716ac5b5a20386e/eggnog-mapper/5.0.2/"
         }           
       },
       "required": ["output_dir", "input_dir", "recognise_marker_genes", "gtdbtk_data", "metatraits_models", "eggnog_db"]
