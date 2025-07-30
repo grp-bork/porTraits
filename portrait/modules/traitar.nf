@@ -7,6 +7,9 @@ process traitar {
 	tuple val(genome_id), path(pfam_matrix)
 	path("traitar_models")
 
+	output:
+	tuple val(genome_id), path("traitar/**.tsv.gz"), emit: predictions
+
 	script:
 	"""
 	mkdir -p traitar/${genome_id}/
