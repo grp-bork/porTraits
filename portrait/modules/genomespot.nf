@@ -8,17 +8,17 @@ process genomespot {
 	path(genomespot_models)
 
 	output:
-	tuple val(genome_id), path("genomespot/**.predictions.tsv"), emit: predictions
+	tuple val(genome_id), path("${genome_id}/genomespot/*.predictions.tsv"), emit: predictions
 
 	script:
 	"""
-	mkdir -p genomespot/${genome_id}/
+	mkdir -p ${genome_id}/genomespot/
 
 	python -m genome_spot.genome_spot \
 	--models ${genomespot_models} \
     --contigs ${genome_fasta} \
     --proteins ${proteins} \
-    --output genomespot/${genome_id}/${genome_id}
+    --output ${genome_id}/genomespot/${genome_id}
 	"""
 
 }

@@ -1,4 +1,5 @@
 process bacdive_ai {
+
 	tag "${genome_id}"
 
 	input:
@@ -6,13 +7,12 @@ process bacdive_ai {
 	path(bacdive_ai_models)
 
 	output:
-	tuple val(genome_id), path("bacdive_ai/**.tsv.gz"), emit: predictions
+	tuple val(genome_id), path("${genome_id}/bacdive_ai/*.tsv.gz"), emit: predictions
 
 	script:
 	"""
-	mkdir -p bacdive_ai/${genome_id}/
-	PFAM2BacDive-AI.py --pfam-matrix ${pfam_matrix} --model-dir ${bacdive_ai_models} --outdir bacdive_ai/${genome_id}
+	mkdir -p ${genome_id}/bacdive_ai/
+	PFAM2BacDive-AI.py --pfam-matrix ${pfam_matrix} --model-dir ${bacdive_ai_models} --outdir ${genome_id}/bacdive_ai
 	"""
-
 
 }

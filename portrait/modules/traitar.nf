@@ -8,12 +8,12 @@ process traitar {
 	path("traitar_models")
 
 	output:
-	tuple val(genome_id), path("traitar/**.tsv.gz"), emit: predictions
+	tuple val(genome_id), path("${genome_id}/traitar/*.tsv.gz"), emit: predictions
 
 	script:
 	"""
-	mkdir -p traitar/${genome_id}/
-	PFAM2Traitar.py --pfam-matrix ${pfam_matrix} --model-dir traitar_models --outdir traitar/${genome_id} --voters ${params.traitar_nvoters}
+	mkdir -p ${genome_id}/traitar/
+	PFAM2Traitar.py --pfam-matrix ${pfam_matrix} --model-dir traitar_models --outdir ${genome_id}/traitar/ --voters ${params.traitar_nvoters}
 	"""
 
 }
