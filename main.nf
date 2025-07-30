@@ -51,7 +51,7 @@ workflow {
 
 	traitar(
 		emapper2matrix.out.pfam_matrix,
-		"${params.metatraits_models}/Traitar/phypat_PGL"
+		"${params.metatraits_models}/Traitar/"
 	)
 
 }
