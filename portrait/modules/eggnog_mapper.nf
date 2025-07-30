@@ -32,13 +32,13 @@ process emapper2matrix {
 	path(pfam_clade_map)
 
 	output:
-	tuple val(genome_id), path("e2m/${genome_id}/*.KEGG_ko.tsv.gz"), emit: ko_matrix, optional: true
-	tuple val(genome_id), path("e2m/${genome_id}/*.PFAMs.tsv.gz"), emit: pfam_matrix, optional: true
+	tuple val(genome_id), path("${genome_id}/e2m/*.KEGG_ko.tsv.gz"), emit: ko_matrix, optional: true
+	tuple val(genome_id), path("${genome_id}/e2m/*.PFAMs.tsv.gz"), emit: pfam_matrix, optional: true
 
 	script:
 	"""
-	mkdir -p e2m/${genome_id}
-	emapper2matrix.py --input-file ${emapper_output} --pfam-map-file ${pfam_clade_map} --outdir e2m/${genome_id}
+	mkdir -p ${genome_id}/em2
+	emapper2matrix.py --input-file ${emapper_output} --pfam-map-file ${pfam_clade_map} --outdir ${genome_id}/e2m
 	"""
 
 }
