@@ -11,14 +11,14 @@ process eggnog_mapper {
 	path(eggnog_db)
 
 	output:
-	tuple val(genome_id), path("${genome_id}/${genome_id}.emapper.annotations"), emit: eggnog
+	tuple val(genome_id), path("${genome_id}/eggnog_mapper/${genome_id}.emapper.annotations"), emit: eggnog
 
 	script:
 	"""
-	mkdir -p ${genome_id}/
+	mkdir -p ${genome_id}/eggnog_mapper
 	
 
-	emapper.py -i ${proteins} --data_dir ${eggnog_db} --output ${genome_id}/${genome_id} -m diamond --cpu $task.cpus --dmnd_algo 0
+	emapper.py -i ${proteins} --data_dir ${eggnog_db} --output ${genome_id}/eggnog_mapper/${genome_id} -m diamond --cpu $task.cpus --dmnd_algo 0
 	"""
 
 }
@@ -37,7 +37,7 @@ process emapper2matrix {
 
 	script:
 	"""
-	mkdir -p ${genome_id}/em2
+	mkdir -p ${genome_id}/e2m
 	emapper2matrix.py --input-file ${emapper_output} --pfam-map-file ${pfam_clade_map} --outdir ${genome_id}/e2m
 	"""
 
