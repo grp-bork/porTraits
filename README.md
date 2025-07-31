@@ -55,8 +55,8 @@ Obtain databases required to run `porTraits` from Zenodo: TBD
 
 ---
 # Usage
-## Cloud-based Workflow Manager (CloWM)
-This workflow is available on the `CloWM` platform (https://clowm.bi.denbi.de/workflows/), enabling user-friendly workflow execution in the cloud: no command line or installation required, free for academic use.
+## GUI-based Execution (CloWM)
+This workflow is available on `CloWM`, the [Cloud-based Workflow Manager](https://clowm.bi.denbi.de/workflows/). `CloWM` enables user-friendly workflow execution in the cloud: no command line or installation required, free for academic use.
 
 ## Command-Line Interface (CLI)
 The workflow run is controlled by environment-specific parameters (see [run.config](https://github.com/grp-bork/porTraits/blob/main/config/run.config)). The parameters in the `params.yml` can be specified on the command line as well.
