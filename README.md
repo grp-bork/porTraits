@@ -34,7 +34,7 @@
 
 
 #### Citation
-This workflow: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13143250.svg)](https://doi.org/10.5281/zenodo.13143250)
+This workflow: [![DOI](tbd)](tbd)
 
 Also cite:
 ```
@@ -43,7 +43,7 @@ TBD
 
 ---
 # Overview
-![Nevermore_workflow](https://raw.githubusercontent.com/grp-bork/samestr_flow/main/docs/nevermore.svg)
+tbd
 
 ---
 # Requirements
