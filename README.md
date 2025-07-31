@@ -30,8 +30,7 @@
 
 ---
 #### Description
-`porTraits` is a [metaTraits](https://metaTraits.embl.de/) workflow for microbial phenotypic trait annotation. Written in Nextflow, the `porTraits` workflow computes genome-based trait predictions from multiple trait annotation tools ([BacDive-AI](https://github.com/LeibnizDSMZ/bacdive-AI/), [GenomeSPOT](https://github.com/cultivarium/GenomeSPOT), [Traitar](https://github.com/hzi-bifo/traitar), [MICROPHERRET](https://github.com/MetabioinfomicsLab/MICROPHERRET/)), along with NCBI and GTDB taxonomy prediction and linking to relevant reference genomes in the [metaTraits](https://metaTraits.embl.de/) database. 
-
+`porTraits` is a [metaTraits](https://metaTraits.embl.de/) workflow for annotating microbial phenotypic traits. Developed in Nextflow, `porTraits` integrates multiple genome-based trait prediction tools ([BacDive-AI](https://github.com/LeibnizDSMZ/bacdive-AI/), [GenomeSPOT](https://github.com/cultivarium/GenomeSPOT), [Traitar](https://github.com/hzi-bifo/traitar), [MICROPHERRET](https://github.com/MetabioinfomicsLab/MICROPHERRET/)) to provide comprehensive trait annotations. The workflow also includes NCBI and GTDB taxonomy assignment, and links results to relevant trait records within the [metaTraits](https://metaTraits.embl.de/) database. 
 
 #### Citation
 This workflow: [![DOI](tbd)](tbd)
@@ -50,7 +49,6 @@ tbd
 
 `porTraits` requires a docker/singularity installation. All dependencies are contained in the `porTraits` docker container.
 
-
 ## porTraits databases
 
 Obtain databases required to run `porTraits` from Zenodo: TBD
@@ -58,7 +56,7 @@ Obtain databases required to run `porTraits` from Zenodo: TBD
 ---
 # Usage
 ## Cloud-based Workflow Manager (CloWM)
-This workflow is available on the `CloWM` platform (https://clowm.bi.denbi.de/workflows/).
+This workflow is available on the `CloWM` platform (https://clowm.bi.denbi.de/workflows/), enabling user-friendly workflow execution in the cloud: no command line or installation required, free for academic use.
 
 ## Command-Line Interface (CLI)
 The workflow run is controlled by environment-specific parameters (see [run.config](https://github.com/grp-bork/porTraits/blob/main/config/run.config)). The parameters in the `params.yml` can be specified on the command line as well.
