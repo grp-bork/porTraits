@@ -165,7 +165,7 @@ if __name__ == "__main__":
         col_rename = {k: v for k, v in name_map.items() if k in wide_prob.columns}
         wide_prob.rename(columns=col_rename, inplace=True)
         wide_prob = wide_prob.sort_index(axis=0).sort_index(axis=1)
-        prob_fp = os.path.join(args.outdir, f"Traitar.probability.{model_name}.tsv.gz")
+        prob_fp = os.path.join(args.outdir, f"Traitar.prob.{model_name}.tsv.gz")
         wide_prob.to_csv(prob_fp, sep='\t', compression='gzip', index_label='sample')
 
     # Merge all binary calls into a dict of DataFrames
@@ -205,10 +205,10 @@ if __name__ == "__main__":
         sep='\t', compression='gzip', index_label='sample'
     )
 
-    # Create Traitar.probability.tsv.gz: mean across all probability values
+    # Create Traitar.prob.tsv.gz: mean across all probability values
     merged_prob_df = pd.concat(merged_prob_frames.values(), axis=1).groupby(level=0, axis=1).mean()
     merged_prob_df = merged_prob_df.sort_index(axis=0).sort_index(axis=1)
     merged_prob_df.to_csv(
-        os.path.join(args.outdir, "Traitar.probability.tsv.gz"),
+        os.path.join(args.outdir, "Traitar.prob.tsv.gz"),
         sep='\t', compression='gzip', index_label='sample'
     )
