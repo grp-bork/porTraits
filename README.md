@@ -1,4 +1,4 @@
-# metaTraits workflow: porTraits
+# porTraits: a metaTraits workflow
 <table>
   <tr width="100%">
     <td width="150px">
