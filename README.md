@@ -42,7 +42,7 @@ TBD
 
 ---
 # Overview
-`porTraits` takes genome or MAG fasta files as input, calls genes with prodigal, creates KO und PFAM matrices with eggNOG-mapper, and uses the matrices to compute model predictions from [BacDive-AI](https://github.com/LeibnizDSMZ/bacdive-AI/), [Traitar](https://github.com/hzi-bifo/traitar), and [MICROPHERRET](https://github.com/MetabioinfomicsLab/MICROPHERRET/). [GenomeSPOT](https://github.com/cultivarium/GenomeSPOT) is run from scratch. [GTDB-Tk](https://github.com/Ecogenomics/GTDBTk) and [reCOGnise](https://github.com/grp-bork/reCOGnise/) are run to obtain GTDB (r220) and NCBI taxonomy, respectively, which is used to retrieve highly similar trait records from the [metaTraits](https://metaTraits.embl.de/) database for context.
+`porTraits` takes genome or MAG fasta files as input, calls genes with prodigal, creates KO and PFAM matrices with eggNOG-mapper, and uses the matrices to compute model predictions from [BacDive-AI](https://github.com/LeibnizDSMZ/bacdive-AI/), [Traitar](https://github.com/hzi-bifo/traitar), and [MICROPHERRET](https://github.com/MetabioinfomicsLab/MICROPHERRET/). [GenomeSPOT](https://github.com/cultivarium/GenomeSPOT) is run from scratch. [GTDB-Tk](https://github.com/Ecogenomics/GTDBTk) and [reCOGnise](https://github.com/grp-bork/reCOGnise/) are run to obtain GTDB (r220) and NCBI taxonomy, respectively, which is used to retrieve highly similar trait records from the [metaTraits](https://metaTraits.embl.de/) database for context.
 
 
 ---
@@ -76,3 +76,4 @@ nextflow run grp-bork/porTraits.nf [-resume] -c /path/to/run.config -params-file
 ## Input files
 Input genome fasta files have to have one of the following file endings: `{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}`. Alternatively, you can set the pattern with
 `params.file_pattern = "**.{<comma-separated-list-of-file-endings>}"`.
+
