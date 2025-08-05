@@ -24,7 +24,7 @@ workflow {
 
 	metatraits_speci_call_ch = recognise_genome.out.speci_status_ok
 		.join(recognise_genome.out.genome_speci)
-		.map { genome_id, status_ok, speci_file -> [ genome_id, speci_file.text.replaceAll(/\\n/, "") ] }
+		.map { genome_id, status_ok, speci_file -> [ genome_id, speci_file.text.replaceAll(/\n/, "") ] }
 
 	metatraits_speci_call(metatraits_speci_call_ch)
 
