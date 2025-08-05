@@ -5,6 +5,7 @@ include { eggnog_mapper; emapper2matrix } from "./portraits/modules/eggnog_mappe
 include { micropherret } from "./portraits/modules/micropherret"
 include { bacdive_ai } from "./portraits/modules/bacdive"
 include { traitar } from "./portraits/modules/traitar"
+include { metatraits_speci_call } from "./portraits/modules/metatraits"
 
 params.file_pattern = "**.{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}"
 
@@ -20,6 +21,12 @@ workflow {
 	gtdbtk_classify(genomes_ch, params.gtdbtk_data)
 
 	recognise_genome(genomes_ch, params.recognise_marker_genes)
+
+	metatraits_speci_call_ch = recognise_genome.out.speci_status_ok
+		.join(recognise_genome.out.genome_speci)
+		.map { genome_id, status_ok, speci_file -> [genome_id, speci_file.text ] }
+
+	metatraits_speci_call(metatraits_speci_call_ch)
 
 	genomespot_input_ch = genomes_ch
 		.join(recognise_genome.out.proteins, by: 0)
