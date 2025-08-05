@@ -1,10 +1,10 @@
-include { recognise_genome } from "./portrait/modules/recognise"
-include { gtdbtk_classify } from "./portrait/modules/gtdbtk"
-include { genomespot } from "./portrait/modules/genomespot"
-include { eggnog_mapper; emapper2matrix } from "./portrait/modules/eggnog_mapper"
-include { micropherret } from "./portrait/modules/micropherret"
-include { bacdive_ai } from "./portrait/modules/bacdive"
-include { traitar } from "./portrait/modules/traitar"
+include { recognise_genome } from "./portraits/modules/recognise"
+include { gtdbtk_classify } from "./portraits/modules/gtdbtk"
+include { genomespot } from "./portraits/modules/genomespot"
+include { eggnog_mapper; emapper2matrix } from "./portraits/modules/eggnog_mapper"
+include { micropherret } from "./portraits/modules/micropherret"
+include { bacdive_ai } from "./portraits/modules/bacdive"
+include { traitar } from "./portraits/modules/traitar"
 
 params.file_pattern = "**.{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}"
 
