@@ -33,7 +33,8 @@
 `porTraits` is a [metaTraits](https://metaTraits.embl.de/) workflow for annotating microbial phenotypic traits. Developed in Nextflow, `porTraits` integrates multiple genome-based trait prediction tools ([BacDive-AI](https://github.com/LeibnizDSMZ/bacdive-AI/), [GenomeSPOT](https://github.com/cultivarium/GenomeSPOT), [Traitar](https://github.com/hzi-bifo/traitar), [MICROPHERRET](https://github.com/MetabioinfomicsLab/MICROPHERRET/)) to provide comprehensive trait annotations. The workflow also includes NCBI and GTDB taxonomy assignment, and provides context by linking to related trait records within the [metaTraits](https://metaTraits.embl.de/) database. 
 
 #### Citation
-This workflow: [![DOI](tbd)](tbd)
+This workflow: [![DOI](https://zenodo.org/badge/1015960396.svg)](https://doi.org/10.5281/zenodo.16809306)
+
 
 Also cite:
 ```
@@ -76,4 +77,5 @@ nextflow run grp-bork/porTraits.nf [-resume] -c /path/to/run.config -params-file
 ## Input files
 Input genome fasta files have to have one of the following file endings: `{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}`. Alternatively, you can set the pattern with
 `params.file_pattern = "**.{<comma-separated-list-of-file-endings>}"`.
+
 
