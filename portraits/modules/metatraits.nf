@@ -2,6 +2,7 @@ def METATRAITS_URL = "https://metatraits.embl.de/api/v1"
 
 process metatraits_speci_call {
 	// container "docker://quay.io/biocontainers/curl:7.45.0--2"
+	container "docker://registry.git.embl.org/schudoma/portraits_metatraits:latest"
 	label "tiny"
 
 
