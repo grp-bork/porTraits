@@ -1,5 +1,5 @@
 process genomespot {
-
+	label "tiny"
 	tag "${genome_id}"
 
 

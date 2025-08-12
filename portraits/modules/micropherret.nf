@@ -1,5 +1,6 @@
 process micropherret {
 	tag "${genome_id}"
+	label "tiny"
 
 	input:
 	tuple val(genome_id), path(ko_matrix)

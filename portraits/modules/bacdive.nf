@@ -1,4 +1,5 @@
 process bacdive_ai {
+	label "tiny"
 
 	tag "${genome_id}"
 

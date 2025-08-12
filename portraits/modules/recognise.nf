@@ -6,6 +6,7 @@ process recognise_genome {
 	container "oras://registry.git.embl.de/schudoma/recognise-singularity/recognise-singularity:8b158eab"
 	tag "${genome_id}"
 	label "recognise"
+	label "small"
 
 	input:
 	tuple val(genome_id), path(genome)

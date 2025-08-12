@@ -1,5 +1,6 @@
 process gtdbtk_classify {
     tag "${genome_id}"
+    label "small"
 
     input:
     tuple val(genome_id), path(genome_fasta)
