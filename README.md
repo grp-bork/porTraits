@@ -53,7 +53,8 @@ TBD
 
 ## porTraits databases
 
-Obtain databases required to run `porTraits` from Zenodo: TBD
+Obtain databases required to run `porTraits` from Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16818976.svg)](https://doi.org/10.5281/zenodo.16818976)
+
 
 ---
 # Usage
@@ -77,5 +78,6 @@ nextflow run grp-bork/porTraits.nf [-resume] -c /path/to/run.config -params-file
 ## Input files
 Input genome fasta files have to have one of the following file endings: `{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}`. Alternatively, you can set the pattern with
 `params.file_pattern = "**.{<comma-separated-list-of-file-endings>}"`.
+
 
 
