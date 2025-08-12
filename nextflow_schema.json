@@ -25,28 +25,28 @@
           "type": "string",
           "description": "Directory path to COG markers",
           "hidden": true,
-          "default": "/vol/data/databases/clowm/CLDB-0190075fa6117f75add6ee173932d013/latest/recognise_marker_genes/"
+          "default": "recognise_marker_genes/"
         },
         "gtdbtk_data": {
           "type": "string",
           "description": "Directory path to GTDB database",
-          "help_text": "This should be the root directory of the GTDB database",
+          "help_text": "This should be the release directory of the GTDB database",
           "hidden": true,
-          "default": "/vol/data/databases/clowm/CLDB-018e12ef116275458ea149715133b0ec/latest/release220"
+          "default": "GTDB/release220"
         },
         "metatraits_models": {
           "type": "string",
-          "description": "Directory path to GTDB database",
-          "help_text": "This should be the root directory of the GTDB database",
+          "description": "Directory path to the porTraits model database",
+          "help_text": "This should be the root directory of the porTraits database",
           "hidden": true,
-          "default": "/vol/data/databases/clowm/CLDB-019837cec3377dd58298a00a9328680c/latest/"
+          "default": "porTraits/"
         },
         "eggnog_db": {
           "type": "string",
           "description": "Directory path to the eggNOG database",
-          "help_text": "This should be the root directory of the GTDB database",
+          "help_text": "This should be the version directory of the eggNOG database",
           "hidden": true,
-          "default": "/vol/data/databases/clowm/CLDB-018e846affa774508716ac5b5a20386e/latest/eggnog-mapper/5.0.2/"
+          "default": "eggnog-mapper/5.0.2/"
         }           
       },
       "required": ["output_dir", "input_dir", "recognise_marker_genes", "gtdbtk_data", "metatraits_models", "eggnog_db"]
