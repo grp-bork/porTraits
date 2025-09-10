@@ -25,9 +25,9 @@ def main():
         url = f"{METATRAITS_URL}/traits/taxonomy/{d['species_tax_id']}"
         request = requests.get(url)
 
-        d = request.json()
+        # d = request.json()
 
-        print(json.dumps(d, indent=4))
+        print(json.dumps(request.json(), indent=4))
 
 
 
