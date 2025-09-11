@@ -16,7 +16,7 @@ process metatraits_speci_call {
 	"""
 	mkdir -p ${genome_id}/metatraits/
 
-	metatraits_comm.py --speci ${speci} > ${genome_id}/metatraits/traits_from_speci.json
+	metatraits_comm.py --speci ${speci} -o ${genome_id}/metatraits/traits_from_speci.json
 	"""
 	// taxid=\$(wget -O - ${METATRAITS_URL}/species_taxonomy/${speci} 2> /dev/null | grep -o '"species_tax_id":"[0-9]\\+"' | cut -f 2 -d : | sed 's/"//g')
 	// wget -O ${genome_id}/metatraits/traits_from_speci.json ${METATRAITS_URL}/traits/taxonomy/\$taxid 2> /dev/null
