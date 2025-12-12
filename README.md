@@ -71,17 +71,18 @@ The workflow run is controlled by environment-specific parameters (see [run.conf
 You can either clone this repository from GitHub and run it as follows
 ```
 git clone https://github.com/grp-bork/porTraits.git
-nextflow run /path/to/porTraits.nf [-resume] -c /path/to/run.config -params-file /path/to/params.yml
+nextflow run /path/to/porTraits [-resume] -c /path/to/run.config -params-file /path/to/params.yml
 ```
 
 Or, you can have nextflow pull it from github and run it from the `$HOME/.nextflow` directory.
 ```
-nextflow run grp-bork/porTraits.nf [-resume] -c /path/to/run.config -params-file /path/to/params.yml
+nextflow run grp-bork/porTraits [-resume] -c /path/to/run.config -params-file /path/to/params.yml
 ```
 
 ## Input files
 Input genome fasta files have to have one of the following file endings: `{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}`. Alternatively, you can set the pattern with
 `params.file_pattern = "**.{<comma-separated-list-of-file-endings>}"`.
+
 
 
 
