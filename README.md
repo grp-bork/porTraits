@@ -55,6 +55,10 @@ TBD
 
 Obtain databases required to run `porTraits` from Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16818976.svg)](https://doi.org/10.5281/zenodo.16818976)
 
+---
+# Database
+
+The reCOGnise marker database can be downloaded from [Zenodo](https://zenodo.org/records/17916463/files/recognise_markers.tar.gz).
 
 ---
 # Usage
@@ -78,6 +82,7 @@ nextflow run grp-bork/porTraits.nf [-resume] -c /path/to/run.config -params-file
 ## Input files
 Input genome fasta files have to have one of the following file endings: `{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}`. Alternatively, you can set the pattern with
 `params.file_pattern = "**.{<comma-separated-list-of-file-endings>}"`.
+
 
 
 
