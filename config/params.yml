@@ -1,0 +1,32 @@
+######### RESOURCE PARAMETERS FOR PORTRAITS WORKFLOW #########
+
+# /path/to/metatraits_models is a directory with 4 subdirectories, one for each
+# of porTraits' predictors:
+#
+# /path/to/metatraits_models
+#       ├── Bacdive-AI
+#       │   └── models
+#       ├── GenomeSPOT
+#       │   └── models
+#       ├── MICROPHERRET
+#       └── Traitar
+#
+# Please download these models from https://zenodo.org/records/16818976/files/porTraits-DB.tar.gz and aggregate them in a directory tree as above.
+# Then point the metatraits_models parameter to that directory tree.
+
+metatraits_models: "/path/to/metatraits_models"
+
+# Please download a copy of the recognise marker db from https://zenodo.org/records/17916463/files/recognise_markers.tar.gz and point the recognise_marker_genes parameter to that location.
+
+recognise_marker_genes: "/path/to/recognise/marker/database"
+
+# Please download a copy of the GTDBtk database and point the gtdbtk_data parameter to that location.
+
+gtdbtk_data: "/path/to/gtdbtk/database"
+
+# Please download the eggnog-mapper database and place it into /path/to/eggnog_db.
+
+eggnog_db: "/path/to/eggnog_db"
+
+# Then add a subdirectory /path/to/eggnog_db/pfam and download the Pfam-A.clans.tsv.gz into that subdirectory.
+# Alternatively, you can point to an existing copy of the Pfam-A.clans.tsv.gz via the parameter pfam_clade_map
