@@ -38,7 +38,7 @@ This workflow: [![DOI](https://zenodo.org/badge/1015960396.svg)](https://doi.org
 
 Also cite:
 ```
-TBD
+Podlesny, Kim et al (2025) metaTraits: a large-scale integration of microbial phenotypic trait information, Nucleic Acids Research, 2025;, gkaf1241, (https://doi.org/10.1093/nar/gkaf1241)[https://doi.org/10.1093/nar/gkaf1241]
 ```
 
 ---
@@ -49,16 +49,20 @@ TBD
 ---
 # Requirements
 
-`porTraits` requires a docker/singularity installation. All dependencies are contained in the `porTraits` docker container.
+`porTraits` requires a docker/singularity installation as all dependencies are served via Docker containers.
 
 ## porTraits databases
 
 Obtain databases required to run `porTraits` from Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16818976.svg)](https://doi.org/10.5281/zenodo.16818976)
 
----
-# Database
+## reCOGnise database
 
 The reCOGnise marker database can be downloaded from [Zenodo](https://zenodo.org/records/17916463/files/recognise_markers.tar.gz).
+
+## eggNOG-mapper database
+
+## GTDBtk database
+
 
 ---
 # Usage
