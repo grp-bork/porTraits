@@ -38,7 +38,7 @@ This workflow: [![DOI](https://zenodo.org/badge/1015960396.svg)](https://doi.org
 
 Also cite:
 ```
-Podlesny, Kim et al (2025) metaTraits: a large-scale integration of microbial phenotypic trait information, Nucleic Acids Research, 2025;, gkaf1241, (https://doi.org/10.1093/nar/gkaf1241)[https://doi.org/10.1093/nar/gkaf1241]
+Podlesny, Kim et al (2025) metaTraits: a large-scale integration of microbial phenotypic trait information, Nucleic Acids Research, 2025;, gkaf1241, https://doi.org/10.1093/nar/gkaf1241
 ```
 
 ---
