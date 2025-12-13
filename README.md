@@ -59,11 +59,6 @@ Obtain databases required to run `porTraits` from Zenodo: [![DOI](https://zenodo
 
 The reCOGnise marker database can be downloaded from [Zenodo](https://zenodo.org/records/17916463/files/recognise_markers.tar.gz).
 
-## eggNOG-mapper database
-
-## GTDBtk database
-
-
 ---
 # Usage
 ## GUI-based Execution (CloWM)
