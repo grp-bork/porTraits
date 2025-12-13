@@ -65,17 +65,17 @@ The reCOGnise marker database can be downloaded from [Zenodo](https://zenodo.org
 This workflow is available on `CloWM`, the [Cloud-based Workflow Manager](https://clowm.bi.denbi.de/workflows/). `CloWM` enables user-friendly workflow execution in the cloud: no command line or installation required, free for academic use.
 
 ## Command-Line Interface (CLI)
-The workflow run is controlled by environment-specific parameters (see [run.config](https://github.com/grp-bork/porTraits/blob/main/config/run.config)). The parameters in the `params.yml` can be specified on the command line as well.
+The workflow run is controlled by environment-specific parameters (see [params.yml](https://github.com/grp-bork/porTraits/blob/main/config/params.yml)). The parameters in the `params.yml` can be specified on the command line as well.
 
 You can either clone this repository from GitHub and run it as follows
 ```
 git clone https://github.com/grp-bork/porTraits.git
-nextflow run /path/to/porTraits [-resume] -c /path/to/run.config -params-file /path/to/params.yml
+nextflow run /path/to/porTraits [-resume] -params-file /path/to/params.yml
 ```
 
 Or, you can have nextflow pull it from github and run it from the `$HOME/.nextflow` directory.
 ```
-nextflow run grp-bork/porTraits [-resume] -c /path/to/run.config -params-file /path/to/params.yml
+nextflow run grp-bork/porTraits [-resume] -params-file /path/to/params.yml
 ```
 
 ## Input files
