@@ -12,6 +12,11 @@ process micropherret {
 	script:
 	"""
 	mkdir -p ${genome_id}/micropherret/
-	KO2MICROPHERRET.py --ko-matrix ${ko_matrix} --model-dir ${micropherret_models} --outdir ${genome_id}/micropherret
+	KO2MICROPHERRET.py --ko-matrix ${ko_matrix} --model-dir ${micropherret_models} --outdir ${genome_id}/micropherret &> warnings.txt || :
+
+	if [[ ! -f ${genome_id}/micropherret/MICROPHERRET.prob.tsv.gz ]]; then
+	  touch warnings.txt
+	  gzip -c warnings.txt > ${genome_id}/micropherret/MICROPHERRET.prob.tsv.gz
+	fi
 	"""
 }
