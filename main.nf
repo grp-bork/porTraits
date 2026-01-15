@@ -14,7 +14,7 @@ workflow {
 	genomes_ch = Channel
         .fromPath(params.input_dir + "/" + params.file_pattern)
         .map { fasta ->
-            def genome_id = fasta.name.replaceAll(/\.(fa|fasta|fna)(\.gz)?/, "")
+            def genome_id = fasta.name.replaceAll(/\.(fa(s(ta)?)?|fna)(\.gz)?$/, "")
             return tuple(genome_id, fasta)
         }
 
