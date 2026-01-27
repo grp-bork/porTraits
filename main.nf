@@ -6,7 +6,7 @@ include { micropherret } from "./portraits/modules/micropherret"
 include { bacdive_ai } from "./portraits/modules/bacdive"
 include { traitar } from "./portraits/modules/traitar"
 include { metatraits_speci_call } from "./portraits/modules/metatraits"
-include { collate_results } from "/portraits/modules/collate"
+include { collate_results } from "./portraits/modules/collate"
 
 
 params.file_pattern = "**.{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}"
