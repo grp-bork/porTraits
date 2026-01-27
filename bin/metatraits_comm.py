@@ -62,6 +62,9 @@ def main():
 
     with open(args.output, 'wb') as json_out:
         if request:
+
+            print(request.url)
+
             for chunk in request.iter_content(chunk_size=8192):
                 json_out.write(chunk)
 
