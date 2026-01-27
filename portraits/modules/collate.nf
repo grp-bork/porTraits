@@ -11,5 +11,6 @@ process collate_results {
 	"""
 	mkdir -p collated/
 	touch collated/final_table.tsv
+	collate_results.py -i . -o collated/
 	"""
 }
