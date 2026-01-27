@@ -35,7 +35,7 @@ process metatraits_taxon_call {
 
 	output:
 	tuple val(lineage), val(lineage_id), path("metatraits/lineage/*.traits_from_lineage.json"), emit: metatraits
-	path("metatraits/lineage/${lineage_id}.txt")
+	tuple val(lineage), val(lineage_id), path("metatraits/lineage/${lineage_id}.txt"), emit: lineage_info
 
 	script:
 	"""

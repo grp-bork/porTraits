@@ -63,7 +63,8 @@ workflow {
 
 	all_results_ch = all_results_ch
 		.mix(metatraits_speci_call.out.metatraits)
-		.mix(metatraits_taxon_call.out.metatraits)
+		.mix(metatraits_taxon_call.out.metatraits.map { lineage, lineage_id, file -> [ lineage_id, file ] } )
+		.mix(metatraits_taxon_call.out.lineage_info.map { lineage, lineage_id, file -> [ lineage_id, file ] } )
 
 	// genomeSPOT
 	genomespot_input_ch = genomes_ch
