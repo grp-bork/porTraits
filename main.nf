@@ -5,7 +5,7 @@ include { eggnog_mapper; emapper2matrix } from "./portraits/modules/eggnog_mappe
 include { micropherret } from "./portraits/modules/micropherret"
 include { bacdive_ai } from "./portraits/modules/bacdive"
 include { traitar } from "./portraits/modules/traitar"
-include { metatraits_speci_call } from "./portraits/modules/metatraits"
+include { metatraits_speci_call; metatraits_taxon_call } from "./portraits/modules/metatraits"
 include { collate_results } from "./portraits/modules/collate"
 
 
@@ -47,6 +47,16 @@ workflow {
 		.unique()
 
 	metatraits_speci_call(speci_ch)
+
+	lineage_ch = gtdbtk_classify.out.gtdb_taxonomy
+		.map { genome_id, file -> file.text }
+		.splitCsv(header: true)
+		.map { row -> row.classification }
+		.unique()
+	
+	lineage_ch.view()
+
+
 
 	all_results_ch = all_results_ch
 		.mix(metatraits_speci_call.out.metatraits)
