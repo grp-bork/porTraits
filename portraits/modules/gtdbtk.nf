@@ -29,7 +29,7 @@ process gtdbtk_classify {
     if [[ -z \$res ]]; then touch gtdbtk/gtdbtk.no.summary.tsv; fi
 
     mv -v gtdbtk ${genome_id}/
-    find ${genome_id} -type f -name 'gtdbtk.*.summary.tsv' | xargs -I{} sh -c 'ln -sf {} \$(dirname {})/${genome_id}.\$(basename {})'
+    find ${genome_id} -type f -name 'gtdbtk.*.summary.tsv' | xargs -I{} sh -c 'ln -sf \$(basename {}) ${genome_id}.\$(basename {})'
 
     """
 }
