@@ -40,7 +40,13 @@ workflow {
 		.mix(recognise_out_ch)
 
 	// metaTraits
-	metatraits_speci_call(recognise_out_ch.map { genome_id, speci_file -> [ genome_id, speci_file.text.replaceAll(/\n/, "") ]})
+	// recognise_out_ch.map { genome_id, speci_file -> [ genome_id, speci_file.text.replaceAll(/\n/, "") ]}
+
+	speci_ch = recognise_out_ch
+		.map { genome_id, speci_file -> speci_file.text.replaceAll(/\n/, "") }
+		.unique()
+
+	metatraits_speci_call(speci_ch)
 
 	all_results_ch = all_results_ch
 		.mix(metatraits_speci_call.out.metatraits)
