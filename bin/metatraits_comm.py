@@ -51,7 +51,8 @@ def main():
             url = f"{METATRAITS_URL}/taxonomy/download"
             params = {
                 "query": re.sub(r' +', "+", name),
-                "rank": {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species",}.get(rank, "species")
+                "rank": {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species",}.get(rank, "species"),
+                "databases": ["gtdb"],
             }
 
             request = requests.get(url, params=params)
