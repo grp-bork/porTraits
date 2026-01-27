@@ -65,6 +65,8 @@ def main():
         if request:
 
             print(request.url)
+            if args.lineage:
+                print(request.json)
 
             for chunk in request.iter_content(chunk_size=8192):
                 json_out.write(chunk)
