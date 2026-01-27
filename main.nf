@@ -50,7 +50,7 @@ workflow {
 
 	lineage_ch = gtdbtk_classify.out.gtdb_taxonomy
 		.map { genome_id, file -> file.text }
-		// .splitCsv(header: true)
+		.splitCsv(header: true)
 		// .map { row -> row.classification }
 		// .unique()
 	
