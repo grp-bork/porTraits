@@ -23,7 +23,7 @@ def main():
 					genome, tool, ctype, *subset = rematch.groups()
 				except ValueError:
 					continue
-				print(genome, tool, ctype, "".join(subset[-1:]), sep="\t")
+				print(genome, tool, ctype, subset[-1], sep="\t")
 				if not subset:
 					d.setdefault(tool, {}).setdefault(genome, {})[ctype] = f
 	
