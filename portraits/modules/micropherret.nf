@@ -18,5 +18,7 @@ process micropherret {
 	  touch warnings.txt
 	  gzip -c warnings.txt > ${genome_id}/micropherret/MICROPHERRET.prob.tsv.gz
 	fi
+
+	find ${genome_id}/ -type f | xargs -I{} sh -c 'mv {} \$(dirname {})/${genome_id}.\$(basename {})'
 	"""
 }

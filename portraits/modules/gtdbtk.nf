@@ -8,6 +8,7 @@ process gtdbtk_classify {
 
     output:
     path("${genome_id}/gtdbtk") //, maxDepth: '2')
+    tuple val(genome_id), path("${genome_id}/gtdbtk/${genome_id}.gtdbtk.*.summary.tsv"), emit: gtdb_taxonomy
 
     script:
     """
@@ -20,6 +21,11 @@ process gtdbtk_classify {
 	fi
 
     gtdbtk classify_wf --mash_db ./mash.db --cpus ${task.cpus} --pplacer_cpus ${task.cpus} --genome_dir ./genomes --out_dir gtdbtk --extension .fna.gz
+
+    res=\$(find gtdbtk -name 'gtdbtk.*.summary.tsv')
+    if [[ -z \$res ]]; then touch gtdbtk/gtdbtk.no.summary.tsv; fi
+
+    find gtdbtk -type f -name 'gtdbtk.*.summary.tsv' | xargs -I{} sh -c 'mv {} \$(dirname {})/${genome_id}.\$(basename {})'
 
     mv -v gtdbtk ${genome_id}/
     """

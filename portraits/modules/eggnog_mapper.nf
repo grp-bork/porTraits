@@ -41,6 +41,8 @@ process emapper2matrix {
 	"""
 	mkdir -p ${genome_id}/e2m
 	emapper2matrix.py --input-file ${emapper_output} --pfam-map-file ${pfam_clade_map} --outdir ${genome_id}/e2m
+
+	find ${genome_id}/ -type f | xargs -I{} sh -c 'mv {} \$(dirname {})/${genome_id}.\$(basename {})'
 	"""
 
 }

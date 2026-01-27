@@ -15,6 +15,8 @@ process traitar {
 	"""
 	mkdir -p ${genome_id}/traitar/
 	PFAM2Traitar.py --pfam-matrix ${pfam_matrix} --model-dir traitar_models --outdir ${genome_id}/traitar/ --voters ${params.traitar_nvoters}
+
+	find ${genome_id}/ -type f | xargs -I{} sh -c 'mv {} \$(dirname {})/${genome_id}.\$(basename {})'
 	"""
 
 }

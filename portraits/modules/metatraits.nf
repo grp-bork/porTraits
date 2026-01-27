@@ -10,13 +10,13 @@ process metatraits_speci_call {
 	tuple val(genome_id), val(speci)
 
 	output:
-	tuple val(genome_id), path("${genome_id}/metatraits/traits_from_speci.json"), emit: metatraits
+	tuple val(genome_id), path("${genome_id}/metatraits/${genome_id}.traits_from_speci.json"), emit: metatraits
 
 	script:
 	"""
 	mkdir -p ${genome_id}/metatraits/
 
-	metatraits_comm.py --speci ${speci} -o ${genome_id}/metatraits/traits_from_speci.json
+	metatraits_comm.py --speci ${speci} -o ${genome_id}/metatraits/${genome_id}.traits_from_speci.json
 	"""
 	// taxid=\$(wget -O - ${METATRAITS_URL}/species_taxonomy/${speci} 2> /dev/null | grep -o '"species_tax_id":"[0-9]\\+"' | cut -f 2 -d : | sed 's/"//g')
 	// wget -O ${genome_id}/metatraits/traits_from_speci.json ${METATRAITS_URL}/traits/taxonomy/\$taxid 2> /dev/null

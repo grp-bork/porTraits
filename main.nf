@@ -6,8 +6,11 @@ include { micropherret } from "./portraits/modules/micropherret"
 include { bacdive_ai } from "./portraits/modules/bacdive"
 include { traitar } from "./portraits/modules/traitar"
 include { metatraits_speci_call } from "./portraits/modules/metatraits"
+include { collate_results } from "/portraits/modules/collate"
+
 
 params.file_pattern = "**.{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}"
+
 
 workflow {
 
@@ -18,16 +21,31 @@ workflow {
             return tuple(genome_id, fasta)
         }
 
+	all_results_ch = Channel.empty()
+
+	// GTDBtk classification	
 	gtdbtk_classify(genomes_ch, params.gtdbtk_data)
 
+	all_results_ch = all_results_ch
+		.mix(gtdbtk_classify.out.gtdb_taxonomy)
+
+	// reCOGnise classification
 	recognise_genome(genomes_ch, params.recognise_marker_genes)
 
-	metatraits_speci_call_ch = recognise_genome.out.speci_status_ok
+	recognise_out_ch = recognise_genome.out.speci_status_ok
 		.join(recognise_genome.out.genome_speci)
-		.map { genome_id, status_ok, speci_file -> [ genome_id, speci_file.text.replaceAll(/\n/, "") ] }
+		.map { genome_id, status_ok, speci_file -> [ genome_id, speci_file ] }
 
-	metatraits_speci_call(metatraits_speci_call_ch)
+	all_results_ch = all_results_ch
+		.mix(recognise_out_ch)
 
+	// metaTraits
+	metatraits_speci_call(recognise_out_ch.map { genome_id, speci_file -> [ genome_id, speci_file.text.replaceAll(/\n/, "") ]})
+
+	all_results_ch = all_results_ch
+		.mix(metatraits_speci_call.out.metatraits)
+
+	// genomeSPOT
 	genomespot_input_ch = genomes_ch
 		.join(recognise_genome.out.proteins, by: 0)
 
@@ -35,7 +53,11 @@ workflow {
 		genomespot_input_ch,
 		"${params.metatraits_models}/GenomeSPOT/models"
 	)
+	
+	all_results_ch = all_results_ch
+		.mix(genomespot.out.predictions)
 
+	// emapper
 	eggnog_mapper(
 		recognise_genome.out.proteins,
 		params.eggnog_db
@@ -46,19 +68,42 @@ workflow {
 		params.pfam_clade_map
 	)
 
+	all_results_ch = all_results_ch
+		.mix(emapper2matrix.out.ko_matrix)
+		.mix(emapper2matrix.out.pfam_matrix)
+
+
+	// micropherret
 	micropherret(
 		emapper2matrix.out.ko_matrix,
 		"${params.metatraits_models}/MICROPHERRET"
 	)
 
+	all_results_ch = all_results_ch
+		.mix(micropherret.out.predictions)
+
+	// bacdive-ai
 	bacdive_ai(
 		emapper2matrix.out.pfam_matrix,
 		"${params.metatraits_models}/BacDive-AI/models"
 	)
 
+	all_results_ch = all_results_ch
+		.mix(bacdive_ai.out.predictions)
+
+	// Traitar
 	traitar(
 		emapper2matrix.out.pfam_matrix,
 		"${params.metatraits_models}/Traitar/"
+	)
+
+	all_results_ch = all_results_ch
+		.mix(traitar.out.predictions)
+
+	collate_results(
+		all_results_ch
+			.map { genome_id, files -> [files].flatten() }
+			.collect()
 	)
 
 }
