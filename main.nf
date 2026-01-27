@@ -63,6 +63,7 @@ workflow {
 
 	all_results_ch = all_results_ch
 		.mix(metatraits_speci_call.out.metatraits)
+		.mix(metatraits_taxon_call.out.metatraits)
 
 	// genomeSPOT
 	genomespot_input_ch = genomes_ch
