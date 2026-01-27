@@ -18,7 +18,7 @@ process genomespot {
 	--models ${genomespot_models} \
     --contigs ${genome_fasta} \
     --proteins ${proteins} \
-    --output ${genome_id}/genomespot/${genome_id}
+    --output ${genome_id}/genomespot/${genome_id}.genomespot
 	"""
 
 }
