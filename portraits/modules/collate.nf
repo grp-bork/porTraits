@@ -1,5 +1,6 @@
 process collate_results {
 	label "tiny"
+	tag "Collating..."
 
 	input:
 	path(files)

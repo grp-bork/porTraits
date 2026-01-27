@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import re
 
 import requests
 
@@ -14,6 +15,7 @@ METATRAITS_API_URL = f"{METATRAITS_URL}/api/v1"
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--speci", type=str)
+    ap.add_argument("--lineage", type=str)
     ap.add_argument("--output", "-o", type=str)
     args = ap.parse_args()
 
@@ -34,20 +36,34 @@ def main():
 
         # print(json.dumps(request.json(), indent=4))
 
-    elif args.taxon and args.rank:
-        # https://metatraits.embl.de/taxonomy?query=Bacteroides+uniformis&rank=species
-        url = f"{METATRAITS_URL}/taxonomy"
-        params = {"query": args.taxon.replace(" ", "+"), "rank": args.rank}
+    elif args.lineage:
 
-        request - requests.get(url, params=params)
-        d = request.json()
+        # d__Bacteria;p__Bacteroidota;c__Kapaibacteriia;o__Kapaibacteriales;f__Kapaibacteriaceae;g__Kapaibacterium;s__
+        lineage = [
+            item.split("__") for item in args.lineage.strip().split(";") if item[-2:] != "__"
+        ]
+        if not lineage:
+            request = None
+        else:
+            rank, name = lineage[-1]
+
+            # https://metatraits.embl.de/taxonomy/download?query=Bacteroides+uniformis&rank=species
+            url = f"{METATRAITS_URL}/taxonomy/download"
+            params = {
+                "query": re.sub(r' +', "+", name),
+                "rank": {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species",}.get(rank, "species")
+            }
+
+            request = requests.get(url, params=params)
+            # d = request.json()
 
     else:
         raise ValueError("No param.")
 
     with open(args.output, 'wb') as json_out:
-        for chunk in request.iter_content(chunk_size=8192):
-            json_out.write(chunk)
+        if request:
+            for chunk in request.iter_content(chunk_size=8192):
+                json_out.write(chunk)
 
 
 

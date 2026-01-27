@@ -48,14 +48,17 @@ workflow {
 
 	metatraits_speci_call(speci_ch)
 
+	def lineage_id = 0
 	lineage_ch = gtdbtk_classify.out.gtdb_taxonomy
 		.map { genome_id, file -> file.text }
 		.splitCsv(header: true, sep: "\t")
 		.map { row -> row.classification }
 		.unique()
+		.map { lineage -> [ lineage, lineage_id++ ]}
 	
 	lineage_ch.dump(pretty: true, tag: "lineage_ch")
 
+	metatraits_taxon_call(lineage_ch)
 
 
 	all_results_ch = all_results_ch
