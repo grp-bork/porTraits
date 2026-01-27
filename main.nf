@@ -54,7 +54,7 @@ workflow {
 		.map { row -> row.classification }
 		.unique()
 	
-	lineage_ch.view()
+	lineage_ch.dump(pretty: true, tag: "lineage_ch")
 
 
 
