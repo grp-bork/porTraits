@@ -8,7 +8,7 @@ process bacdive_ai {
 	path(bacdive_ai_models)
 
 	output:
-	tuple val(genome_id), path("${genome_id}/bacdive_ai/*.tsv.gz"), emit: predictions
+	tuple val(genome_id), path("${genome_id}/bacdive_ai/*.BacDiveAI.*.tsv.gz"), emit: predictions
 
 	script:
 	"""

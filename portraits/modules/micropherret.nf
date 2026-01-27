@@ -7,7 +7,7 @@ process micropherret {
 	path(micropherret_models)
 
 	output:
-	tuple val(genome_id), path("${genome_id}/micropherret/**.tsv.gz"), emit: predictions
+	tuple val(genome_id), path("${genome_id}/micropherret/*.MICROPHERRET.*.tsv.gz"), emit: predictions
 
 	script:
 	"""
