@@ -30,7 +30,7 @@ class PortraitsCollator:
 			return json.load(_in)
 
 	def harmonize(self, tool, trait):
-		return self.harmonized_traits.get(tool, {}).get(trait, "NA")
+		return self.traits_harmonized.get(tool, {}).get(trait, "NA")
 
 	def scan_results_dir(self, results_dir):
 		d = {}
