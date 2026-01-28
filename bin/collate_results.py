@@ -57,8 +57,8 @@ class PortraitsCollator:
 		df_binary = pd.read_csv(f_binary, sep="\t", index_col=0,)
 		df_prob = pd.read_csv(f_prob, sep="\t", index_col=0, header=0, names=df_binary.columns,)
 
-		print(df_binary)
-		print(df_prob)
+		# print(df_binary)
+		# print(df_prob)
 
 		trait_data = []
 		for trait in df_binary.columns:
@@ -76,7 +76,7 @@ class PortraitsCollator:
 				)
 			)
 
-			print(*trait_data, sep="\n")
+			# print(*trait_data, sep="\n")
 
 		features, categories, group1, group2, ontology, links = zip(*trait_data)
 		
@@ -119,9 +119,9 @@ def main():
 	print(results)
 
 	for tool, genomes in results.items():
-		print(tool)
+		# print(tool)
 		for genome, files in genomes.items():
-			print(genome, files)
+			print(tool, genome, files)
 			df = pc.process_predictor_outputs(tool, files["binary"], files["prob"])
 			print(df)
 
