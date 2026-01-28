@@ -118,12 +118,17 @@ def main():
 	results = pc.scan_results_dir(args.input_dir)
 	print(results)
 
+
+	data_frames = []
 	for tool, genomes in results.items():
 		# print(tool)
 		for genome, files in genomes.items():
-			print(tool, genome, files)
-			df = pc.process_predictor_outputs(tool, files["binary"], files["prob"])
-			print(df)
+			# print(tool, genome, files)
+			data_frames.append(pc.process_predictor_outputs(tool, files["binary"], files["prob"]))
+	
+	if data_frames:
+		df = pd.concat([data_frames])
+		df.to_csv(f"{args.output_dir}/concat.tsv.gz", sep="\t", index=False,)
 
 	
 	
