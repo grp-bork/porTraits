@@ -50,7 +50,8 @@ def main():
             # https://metatraits.embl.de/taxonomy/download?query=Bacteroides+uniformis&rank=species
             url = f"{METATRAITS_URL}/taxonomy/download"
             params = {
-                "query": re.sub(r' +', "+", name),
+                # "query": re.sub(r' +', "+", name),
+                "query": name,
                 "rank": {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species",}.get(rank, "species"),
                 "databases": ["gtdb"],
             }
