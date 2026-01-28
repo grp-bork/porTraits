@@ -55,7 +55,7 @@ class PortraitsCollator:
 		tool_version = self.versions.get(tool.lower(), "NA",)
 
 		df_binary = pd.read_csv(f_binary, sep="\t", index_col=0,)
-		df_prob = pd.read_csv(f_prob, sep="\t", index_col=0,)
+		df_prob = pd.read_csv(f_prob, sep="\t", index_col=0, header=0, names=df_binary.columns,)
 
 		trait_data = []
 		for trait in df_binary.columns:
