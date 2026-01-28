@@ -45,7 +45,7 @@ class PortraitsCollator:
 					except ValueError:
 						continue
 					print(genome, tool, ctype, subset[-1], sep="\t")
-					if not subset:
+					if not subset[-1]:
 						d.setdefault(tool, {}).setdefault(genome, {})[ctype] = f
 
 		return d
