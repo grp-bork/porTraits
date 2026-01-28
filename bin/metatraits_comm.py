@@ -53,7 +53,7 @@ def main():
                 # "query": re.sub(r' +', "+", name),
                 "query": name,
                 "rank": {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species",}.get(rank, "species"),
-                "databases": ["gtdb"],
+                "taxonomy": "gtdb",
             }
             headers = {
                 # "Content-Disposition": f"attachment; filename=summary_{tax_rank}_{tax_query}.json"
