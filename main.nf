@@ -125,9 +125,9 @@ workflow {
 		all_results_ch
 			.map { genome_id, files -> [files].flatten() }
 			.collect(),
-			"${projectDir}/assets/traits_info.json",
-			"${projectDir}/assets/traits_harmonized.json",
-			"${projectDir}/assets/versions.json"
+		"${projectDir}/assets/traits_info.json",
+		"${projectDir}/assets/traits_harmonized.json",
+		"${projectDir}/assets/versions.json"
 
 	)
 

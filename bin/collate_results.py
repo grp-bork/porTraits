@@ -112,7 +112,9 @@ def main():
 	results = pc.scan_results_dir(args.input_dir)
 
 	for tool, genomes in results.items():
+		print(tool)
 		for genome, files in genomes.items():
+			print(genome, files)
 			df = pc.process_predictor_outputs(tool, files["binary"], files["prob"])
 			print(df)
 
