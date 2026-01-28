@@ -54,8 +54,12 @@ def main():
                 "rank": {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species",}.get(rank, "species"),
                 "databases": ["gtdb"],
             }
+            headers = {
+                # "Content-Disposition": f"attachment; filename=summary_{tax_rank}_{tax_query}.json"
+                "Content-Disposition": "inline"
+            }
 
-            request = requests.get(url, params=params)
+            request = requests.get(url, params=params, headers=headers)
             # d = request.json()
 
     else:
