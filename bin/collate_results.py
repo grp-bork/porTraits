@@ -76,7 +76,10 @@ class PortraitsCollator:
 				)
 			)
 
+			print(*trait_data, sep="\n")
+
 			features, categories, group1, group2, ontology, links = zip(*trait_data)
+			
 			
 			return pd.DataFrame(
 				{
