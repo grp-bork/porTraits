@@ -198,7 +198,7 @@ if __name__ == "__main__":
         )
 
     # Create Traitar.binary.tsv.gz: merged values set to 1 if > 0 in any model
-    merged_binary_df = ((pd.concat(merged_binary_frames.values(), axis=1) > 0).astype(int).groupby(level=0, axis=1).mean() > 1).astype(int)
+    merged_binary_df = ((pd.concat(merged_binary_frames.values(), axis=1) > 0).astype(int).groupby(level=0, axis=1).mean() > 0).astype(int)
     merged_binary_df = merged_binary_df.sort_index(axis=0).sort_index(axis=1)
     merged_binary_df.to_csv(
         os.path.join(args.outdir, "Traitar.binary.tsv.gz"),
