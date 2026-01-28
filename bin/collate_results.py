@@ -57,6 +57,9 @@ class PortraitsCollator:
 		df_binary = pd.read_csv(f_binary, sep="\t", index_col=0,)
 		df_prob = pd.read_csv(f_prob, sep="\t", index_col=0, header=0, names=df_binary.columns,)
 
+		print(df_binary)
+		print(df_prob)
+
 		trait_data = []
 		for trait in df_binary.columns:
 			feature = self.harmonize(tool.lower(), trait)
