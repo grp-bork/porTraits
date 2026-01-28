@@ -110,6 +110,7 @@ def main():
 	pc = PortraitsCollator(args)
 
 	results = pc.scan_results_dir(args.input_dir)
+	print(results)
 
 	for tool, genomes in results.items():
 		print(tool)
