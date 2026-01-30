@@ -143,7 +143,7 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 		)
 
 	def process_genomespot_outputs(self, f, genome):
-		df = pd.read_csv(f, sep="\t", index_col=0,)
+		df = pd.read_csv(f, sep="\t", index_col=0,).transpose()
 		values = df.iloc[0].to_list()
 		errors = df.iloc[1].to_list()
 
