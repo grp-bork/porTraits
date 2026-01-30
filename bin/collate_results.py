@@ -92,7 +92,9 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 			# print(*trait_data, sep="\n")
 
 		probabilities, binaries = df_prob.iloc[0].tolist(), df_binary.iloc[0].tolist()
-		 
+		
+		tool_features = df_binary.columns.to_list()
+
 		if tool.lower() in ("bacdiveai", "traitar") and pos_anaerobe is not None:
 			if pos_aerotolerant is None:
 				pos_aerotolerant = len(trait_data)
@@ -109,6 +111,7 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 				)
 				probabilities.append(None)
 				binaries.append(None)
+				tool_features.append("aerotolerant")
 			
 			probabilities[pos_aerotolerant] = 1 - probabilities[pos_anaerobe]
 			binaries[pos_aerotolerant] = int(probabilities[pos_aerotolerant] > 0.5)
@@ -127,8 +130,8 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 				"trait_link": links,
 				"tool": tool,
 				"tool_version": tool_version,
-				"tool_feature": df_binary.columns,
-				"genome": df_binary.index[0].tolist()[0],
+				"tool_feature": tool_features,  # df_binary.columns,
+				"genome": df_binary.index[0],
 				"value_probability": probabilities,  # df_prob.iloc[0].tolist(),
 				"value_binary": binaries,  # df_binary.iloc[0].tolist(),
 			}
