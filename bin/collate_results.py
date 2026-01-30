@@ -128,8 +128,8 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 				"tool_version": tool_version,
 				"tool_feature": df_binary.columns,
 				"genome": df_binary.index[0],
-				"value_probability": df_prob.iloc[0].tolist(),
-				"value_binary": df_binary.iloc[0].tolist(),
+				"value_probability": probabilities,  # df_prob.iloc[0].tolist(),
+				"value_binary": binaries,  # df_binary.iloc[0].tolist(),
 			}
 		)
 
