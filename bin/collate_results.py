@@ -50,7 +50,7 @@ class PortraitsCollator:
 					if not subset[-1]:
 						d.setdefault(tool, {}).setdefault(genome, {})[ctype] = f
 				else:
-					fn_match = re.match(r'r(.+)\.genomespot\.predictions\.tsv', f.name)
+					fn_match = re.match(r'(.+)\.genomespot\.predictions\.tsv', f.name)
 					if fn_match:
 						genome, *_ = fn_match.groups()
 						d.setdefault("genomespot", {}).setdefault(genome, []).append(f)
