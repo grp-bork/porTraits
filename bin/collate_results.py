@@ -162,7 +162,7 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 					tmeta.get("ontology", "NA"),
 					tmeta.get("category", "NA"),
 					PortraitsCollator.get_metatraits_link(feature),
-					None,
+					"NA",
 				]
 			)
 	
