@@ -49,6 +49,11 @@ class PortraitsCollator:
 					print(genome, tool, ctype, subset[-1], sep="\t")
 					if not subset[-1]:
 						d.setdefault(tool, {}).setdefault(genome, {})[ctype] = f
+				else:
+					fn_match = re.match(r'r(.+)\.genomespot\.predictions\.tsv', f.name)
+					if fn_match:
+						genome, *_ = fn_match.groups()
+						d.setdefault("genomespot", {}).setdefault(genome, []).append(f)
 
 		return d
 
@@ -137,7 +142,59 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 			}
 		)
 
+	def process_genomespot_outputs(self, f, genome):
+		df = pd.read_csv(f, sep="\t", index_col=0,)
+		values = df.iloc[0].to_list()
+		errors = df.iloc[1].to_list()
 
+		trait_data = []
+		pos_oxygen = None
+		for trait in df.columns:
+			feature = self.harmonize("genomespot", trait)
+			tmeta = self.traits_info.get(feature, {})
+			if trait == "oxygen":
+				pos_oxygen = len(trait_data)
+			trait_data.append(
+				[
+					feature,
+					tmeta.get("group1", "NA"),
+					tmeta.get("group2", "NA"),
+					tmeta.get("ontology", "NA"),
+					tmeta.get("category", "NA"),
+					PortraitsCollator.get_metatraits_link(feature),
+					None,
+				]
+			)
+	
+		# for genomeSPOT use value, except 'oxygen' which is a bit stupid: 
+		# the value is 'not tolerant' OR 'tolerant' and 'error' has the value for the probability so is never <0.5. 
+		# This needs recoding with 1-probability if 'not tolerant'
+
+		if pos_oxygen is not None:
+			if values[pos_oxygen] == "not tolerant":
+				values[pos_oxygen] = 1 - errors[pos_oxygen]
+			else:
+				values[pos_oxygen] = errors[pos_oxygen]
+			trait_data[pos_oxygen][-1] = values[pos_oxygen] > 0.5
+
+		features, categories, group1, group2, ontology, links, binaries = zip(*trait_data)
+
+		return pd.DataFrame(
+			{
+				"feature": features,
+				"category": categories,
+				"group1": group1,
+				"group2": group2,
+				"ontology": ontology,
+				"trait_link": links,
+				"tool": "genomespot",
+				"tool_version": self.versions.get("genomespot", "NA"),
+				"tool_feature": df.columns,  # df_binary.columns,
+				"genome": genome,
+				"value_probability": values,  # df_prob.iloc[0].tolist(),
+				"value_binary": binaries,  # df_binary.iloc[0].tolist(),
+			}
+		)
 
 
 
@@ -161,9 +218,13 @@ def main():
 	data_frames = []
 	for tool, genomes in results.items():
 		# print(tool)
-		for genome, files in genomes.items():
-			# print(tool, genome, files)
-			data_frames.append(pc.process_predictor_outputs(tool, files["binary"], files["prob"]))
+		if tool == "genomespot":
+			for genome, files in genomes.items():
+				data_frames.append(pc.process_genomespot_outputs(files[0], genome))
+		else:
+			for genome, files in genomes.items():
+				# print(tool, genome, files)
+				data_frames.append(pc.process_predictor_outputs(tool, files["binary"], files["prob"]))
 	
 	if data_frames:
 		df = pd.concat(data_frames)
