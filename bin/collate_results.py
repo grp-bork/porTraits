@@ -32,7 +32,7 @@ class PortraitsCollator:
 			return json.load(_in)
 
 	def harmonize(self, tool, trait):
-		return self.traits_harmonized.get(tool, {}).get(trait, "NA")
+		return self.traits_harmonized.get(tool, {}).get(trait)
 
 	def scan_results_dir(self, results_dir):
 		d = {}
@@ -59,7 +59,7 @@ class PortraitsCollator:
 
 	def process_predictor_outputs(self, tool, f_binary, f_prob):
 
-		tool_version = self.versions.get(tool.lower(), "NA",)
+		tool_version = self.versions.get(tool.lower())
 
 		df_binary = pd.read_csv(f_binary, sep="\t", index_col=0,)
 		df_prob = pd.read_csv(f_prob, sep="\t", index_col=0, header=0, names=df_binary.columns,)
@@ -82,10 +82,10 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 			trait_data.append(
 				(
 					feature,
-					tmeta.get("category", "NA"),
-					tmeta.get("group1", "NA"),
-					tmeta.get("group2", "NA"),
-					tmeta.get("ontology", "NA"),
+					tmeta.get("category"),
+					tmeta.get("group1"),
+					tmeta.get("group2"),
+					tmeta.get("ontology"),
 					PortraitsCollator.get_metatraits_link(feature),
 				)
 			)
@@ -107,10 +107,10 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 				trait_data.append(
 					(
 						"aerotolerant",
-						tmeta.get("category", "NA"),
-						tmeta.get("group1", "NA"),
-						tmeta.get("group2", "NA"),
-						tmeta.get("ontology", "NA"),
+						tmeta.get("category"),
+						tmeta.get("group1"),
+						tmeta.get("group2"),
+						tmeta.get("ontology"),
 						PortraitsCollator.get_metatraits_link("aerotolerant"),
 					)
 				)
@@ -157,12 +157,12 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 			trait_data.append(
 				[
 					feature,
-					tmeta.get("category", "NA"),
-					tmeta.get("group1", "NA"),
-					tmeta.get("group2", "NA"),
-					tmeta.get("ontology", "NA"),
+					tmeta.get("category"),
+					tmeta.get("group1"),
+					tmeta.get("group2"),
+					tmeta.get("ontology"),
 					PortraitsCollator.get_metatraits_link(feature),
-					"NA",
+					None,
 				]
 			)
 	
@@ -188,7 +188,7 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 				"ontology": ontology,
 				"trait_link": links,
 				"tool": "genomespot",
-				"tool_version": self.versions.get("genomespot", "NA"),
+				"tool_version": self.versions.get("genomespot"),
 				"tool_feature": df.columns,  # df_binary.columns,
 				"genome": genome,
 				"value_probability": values,  # df_prob.iloc[0].tolist(),
@@ -228,7 +228,7 @@ def main():
 	
 	if data_frames:
 		df = pd.concat(data_frames).sort_values(by=["category", "group1", "group2", "feature", "tool",])
-		df.to_csv(f"{args.output_dir}/concat.tsv.gz", sep="\t", index=False,)
+		df.to_csv(f"{args.output_dir}/concat.tsv.gz", sep="\t", index=False, na_rep="NA",)
 
 	
 	
