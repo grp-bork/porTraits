@@ -227,7 +227,7 @@ def main():
 				data_frames.append(pc.process_predictor_outputs(tool, files["binary"], files["prob"]))
 	
 	if data_frames:
-		df = pd.concat(data_frames)
+		df = pd.concat(data_frames).sort_values(by=["category", "group1", "group2", "feature", "tool",])
 		df.to_csv(f"{args.output_dir}/concat.tsv.gz", sep="\t", index=False,)
 
 	
