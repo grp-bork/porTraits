@@ -20,7 +20,7 @@ class PortraitsCollator:
 
 	@staticmethod
 	def get_metatraits_link(trait):
-		display_id = trait.lower().replace("*", "")
+		display_id = trait.lower().replace("*", "") if isinstance(trait, str) else "na"
 		display_id = re.sub(r"[^a-z0-9]+", "-", display_id).strip("-")
 		if display_id == "na":
 			return "-"
