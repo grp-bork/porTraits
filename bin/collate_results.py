@@ -113,6 +113,7 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 			probabilities[pos_aerotolerant] = 1 - probabilities[pos_anaerobe]
 			binaries[pos_aerotolerant] = int(probabilities[pos_aerotolerant] > 0.5)
 
+
 		features, categories, group1, group2, ontology, links = zip(*trait_data)
 		
 		
@@ -127,7 +128,7 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 				"tool": tool,
 				"tool_version": tool_version,
 				"tool_feature": df_binary.columns,
-				"genome": df_binary.index[0],
+				"genome": df_binary.index[0].tolist()[0],
 				"value_probability": probabilities,  # df_prob.iloc[0].tolist(),
 				"value_binary": binaries,  # df_binary.iloc[0].tolist(),
 			}
