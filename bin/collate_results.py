@@ -175,7 +175,7 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 				values[pos_oxygen] = 1 - errors[pos_oxygen]
 			else:
 				values[pos_oxygen] = errors[pos_oxygen]
-			trait_data[pos_oxygen][-1] = values[pos_oxygen] > 0.5
+			trait_data[pos_oxygen][-1] = int(values[pos_oxygen] > 0.5)
 
 		features, categories, group1, group2, ontology, links, binaries = zip(*trait_data)
 
