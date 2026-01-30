@@ -111,7 +111,7 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 						tmeta.get("group1", "NA"),
 						tmeta.get("group2", "NA"),
 						tmeta.get("ontology", "NA"),
-						PortraitsCollator.get_metatraits_link(feature),
+						PortraitsCollator.get_metatraits_link("aerotolerant"),
 					)
 				)
 				probabilities.append(None)
