@@ -157,10 +157,10 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 			trait_data.append(
 				[
 					feature,
+					tmeta.get("category", "NA"),
 					tmeta.get("group1", "NA"),
 					tmeta.get("group2", "NA"),
 					tmeta.get("ontology", "NA"),
-					tmeta.get("category", "NA"),
 					PortraitsCollator.get_metatraits_link(feature),
 					"NA",
 				]
