@@ -64,7 +64,7 @@ class PortraitsCollator:
 				fn_match = re.match(r'(.+)\.specI\.txt', f.name)
 				if fn_match:
 					genome, *_ = fn_match.groups()
-					d.setdefault("speci", {}).setdefault(genome, []).append(f)
+					d.setdefault("recognise", {}).setdefault(genome, []).append(f)
 					continue
 
 		return d
