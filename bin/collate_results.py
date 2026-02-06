@@ -215,7 +215,7 @@ def parse_taxonomy_data(gtdb=None, speci=None):
 			with open(files[0], "rt") as _in:
 				tax_d.setdefault(genome, {})["speci"] = _in.read()
 
-	return pd.DataFrame(tax_d)
+	return pd.DataFrame(tax_d).transpose()
 
 
 
@@ -251,9 +251,9 @@ def main():
 				# print(tool, genome, files)
 				data_frames.append(pc.process_predictor_outputs(tool, files["binary"], files["prob"]))
 
-	tax_df = parse_taxonomy_data(gtdb=results.get("gtdbtk"), speci=results.get("recognise"))
 	
 	if data_frames:
+		tax_df = parse_taxonomy_data(gtdb=results.get("gtdbtk"), speci=results.get("recognise"))
 		df = pd.concat(data_frames)
 
 		df = pd.merge(df, tax_df, left_on="genome", right_index=True,)
