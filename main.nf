@@ -42,31 +42,37 @@ workflow {
 	// metaTraits
 	// recognise_out_ch.map { genome_id, speci_file -> [ genome_id, speci_file.text.replaceAll(/\n/, "") ]}
 
-	if (params.query_metatraits) {
-
-		speci_ch = recognise_out_ch
-			.map { genome_id, speci_file -> speci_file.text.replaceAll(/\n/, "") }
-			.unique()
-
-		metatraits_speci_call(speci_ch)
-
-		def lineage_id = 0
-		lineage_ch = gtdbtk_classify.out.gtdb_taxonomy
-			.map { genome_id, file -> file.text }
-			.splitCsv(header: true, sep: "\t")
-			.map { row -> row.classification }
-			.unique()
-			.map { lineage -> [ lineage, lineage_id++ ]}
-		
-		lineage_ch.dump(pretty: true, tag: "lineage_ch")
-
-		metatraits_taxon_call(lineage_ch)
+	if (params.query_metatraits && params.query_metatraits != "none") {
 
 
-		all_results_ch = all_results_ch
-			.mix(metatraits_speci_call.out.metatraits)
-			.mix(metatraits_taxon_call.out.metatraits.map { lineage, lid, file -> [ lid, file ] } )
-			.mix(metatraits_taxon_call.out.lineage_info.map { lineage, lid, file -> [ lid, file ] } )
+		if (params.query_metatraits == "NCBI") {
+
+			speci_ch = recognise_out_ch
+				.map { genome_id, speci_file -> speci_file.text.replaceAll(/\n/, "") }
+				.unique()
+			metatraits_speci_call(speci_ch)
+			all_results_ch = all_results_ch
+				.mix(metatraits_speci_call.out.metatraits)
+
+		} else if (params.query_metatraits == "GTDB") {
+
+			def lineage_id = 0
+			lineage_ch = gtdbtk_classify.out.gtdb_taxonomy
+				.map { genome_id, file -> file.text }
+				.splitCsv(header: true, sep: "\t")
+				.map { row -> row.classification }
+				.unique()
+				.map { lineage -> [ lineage, lineage_id++ ]}
+			
+			lineage_ch.dump(pretty: true, tag: "lineage_ch")
+
+			metatraits_taxon_call(lineage_ch)
+
+			all_results_ch = all_results_ch
+				.mix(metatraits_taxon_call.out.metatraits.map { lineage, lid, file -> [ lid, file ] } )
+				.mix(metatraits_taxon_call.out.lineage_info.map { lineage, lid, file -> [ lid, file ] } )
+
+		}
 
 	}
 

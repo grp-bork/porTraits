@@ -22,9 +22,10 @@
           "description": "Directory path to output files"
         },
         "query_metatraits": {
-          "type": "boolean",
+          "type": "string",
+          "enum": ["none", "NCBI", "GTDB"],
           "description": "Add metatraits results",
-          "default": false
+          "default": "none"
         },
         "recognise_marker_genes": {
           "type": "string",
