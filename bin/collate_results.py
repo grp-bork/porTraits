@@ -49,11 +49,18 @@ class PortraitsCollator:
 					print(genome, tool, ctype, subset[-1], sep="\t")
 					if not subset[-1]:
 						d.setdefault(tool, {}).setdefault(genome, {})[ctype] = f
-				else:
-					fn_match = re.match(r'(.+)\.genomespot\.predictions\.tsv', f.name)
-					if fn_match:
-						genome, *_ = fn_match.groups()
-						d.setdefault("genomespot", {}).setdefault(genome, []).append(f)
+					continue
+				fn_match = re.match(r'(.+)\.genomespot\.predictions\.tsv', f.name)
+				if fn_match:
+					genome, *_ = fn_match.groups()
+					d.setdefault("genomespot", {}).setdefault(genome, []).append(f)
+					continue
+				# IMCC31440b.gtdbtk.bac120.summary.tsv
+				fn_match = re.match(r'(.+)\.gtdbtk\.(.+)\.summary\.tsv', f.name)
+				if fn_match:
+					genome, *_ = fn_match.groups()
+					d.setdefault("gtdbtk", {}).setdefault(genome, []).append(f)
+					continue
 
 		return d
 
@@ -196,6 +203,20 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 			}
 		)
 
+def parse_taxonomy_data(gtdb=None, speci=None):
+	tax_d = {}
+	if gtdb:
+		for genome, files in gtdb:
+			with open(files[0], "rb") as _in:
+				lineage = _in.readlines()[1].strip().split("\t")[1]
+				tax_d.setdefault(genome, {})["gtdb"] = lineage
+	if speci:
+		for genome, files in speci:
+			with open(files[0], "rb") as _in:
+				tax_d.setdefault(genome, {})["speci"] = _in.read()
+
+	return pd.DataFrame(tax_d)
+
 
 
 
@@ -217,6 +238,10 @@ def main():
 
 	data_frames = []
 	for tool, genomes in results.items():
+
+		if tool == "gtdbtk" or tool == "recognise":
+			continue
+
 		# print(tool)
 		if tool == "genomespot":
 			for genome, files in genomes.items():
@@ -225,10 +250,15 @@ def main():
 			for genome, files in genomes.items():
 				# print(tool, genome, files)
 				data_frames.append(pc.process_predictor_outputs(tool, files["binary"], files["prob"]))
+
+	tax_df = parse_taxonomy_data(gtdb=results.get("gtdbtk"), speci=results.get("recognise"))
 	
 	if data_frames:
-		df = pd.concat(data_frames).sort_values(by=["category", "group1", "group2", "feature", "tool",])
-		df.to_csv(f"{args.output_dir}/concat.tsv.gz", sep="\t", index=False, na_rep="NA",)
+		df = pd.concat(data_frames)
+
+		df = pd.merge(df, tax_df, left_on="genome", right_index=True,)
+
+		df.sort_values(by=["category", "group1", "group2", "feature", "tool",]).to_csv(f"{args.output_dir}/concat.tsv.gz", sep="\t", index=False, na_rep="NA",)
 
 	
 	
