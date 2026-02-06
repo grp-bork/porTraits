@@ -66,6 +66,10 @@ class PortraitsCollator:
 					genome, *_ = fn_match.groups()
 					d.setdefault("recognise", {}).setdefault(genome, []).append(f)
 					continue
+				fn_match = re.match(r'([0-9]+)\.(traits_from_lineage\.json|txt)')
+				if fn_match:
+					lineage_id, *ltype = fn_match.groups()
+					d.setdefault("metatraits_gtdb").setdefault(lineage_id, [None, None])[ltype[0] == "txt"] = f
 
 		return d
 
@@ -222,6 +226,43 @@ def parse_taxonomy_data(gtdb=None, speci=None):
 
 	return pd.DataFrame(tax_d).transpose()
 
+def parse_gtdb_traits(fn, lineage_fn):
+	with open(lineage_fn, "rt") as _in:
+		lineage = _in.read().strip().split("\t")[1]
+	with open(fn, "rb") as _in:
+		trait_data = []
+		for trait in json.load(_in):			
+			if trait.get("name"):
+
+				perc_str = ";".join(
+					f"{k}:{v}"
+					for k, v in trait.get("percentages", {}).items()
+				)
+
+				trait_data.append(
+					(
+						trait.get("name"),
+						trait.get("unique_databases"),
+						trait.get("majority_label"),
+						perc_str,
+					)
+				)
+
+	names, dbs, majorities, percentages = zip(*trait_data)
+	return pd.DataFrame(
+		{
+			"lineage": lineage,
+			"name": names,
+   			"n_unique_databases": dbs,
+			"majority_label": majorities,
+			"percentages": percentages,
+		}
+	)
+
+
+
+
+
 
 
 
@@ -244,7 +285,7 @@ def main():
 	data_frames = []
 	for tool, genomes in results.items():
 
-		if tool == "gtdbtk" or tool == "recognise":
+		if tool in ("metatraits_gtdb", "gtdbtk", "recognise",):
 			continue
 
 		# print(tool)
@@ -256,15 +297,28 @@ def main():
 				# print(tool, genome, files)
 				data_frames.append(pc.process_predictor_outputs(tool, files["binary"], files["prob"]))
 
-	
+
 	if data_frames:
 		tax_df = parse_taxonomy_data(gtdb=results.get("gtdbtk"), speci=results.get("recognise"))
-		tax_df.to_csv(f"{args.output_dir}/tax.tsv", sep="\t", index=False, na_rep="NA",)
+		# tax_df.to_csv(f"{args.output_dir}/tax.tsv", sep="\t", index=False, na_rep="NA",)
+
 		df = pd.concat(data_frames)
 
 		df = pd.merge(df, tax_df, left_on="genome", right_index=True,)
 
 		df.sort_values(by=["category", "group1", "group2", "feature", "tool",]).to_csv(f"{args.output_dir}/concat.tsv.gz", sep="\t", index=False, na_rep="NA",)
+
+	if results.get("metatraits_gtdb"):
+		data_frames = []
+		# d.setdefault("metatraits_gtdb").setdefault(lineage_id, [None, None])[ltype[0] == "txt"] = f
+		for lineage_id, files in results.get("metatraits_gtdb").items():
+			data_frames.append(parse_gtdb_traits(*files))
+
+			df = pd.concat(data_frames)
+
+			df.to_csv(f"{args.output_dir}/metatraits_gtdb.tsv.gz", sep="\t", index=False, na_rep="NA",)
+
+	
 
 	
 	
