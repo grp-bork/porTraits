@@ -206,12 +206,12 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 def parse_taxonomy_data(gtdb=None, speci=None):
 	tax_d = {}
 	if gtdb:
-		for genome, files in gtdb:
+		for genome, files in gtdb.items():
 			with open(files[0], "rb") as _in:
 				lineage = _in.readlines()[1].strip().split("\t")[1]
 				tax_d.setdefault(genome, {})["gtdb"] = lineage
 	if speci:
-		for genome, files in speci:
+		for genome, files in speci.items():
 			with open(files[0], "rb") as _in:
 				tax_d.setdefault(genome, {})["speci"] = _in.read()
 
