@@ -259,6 +259,7 @@ def main():
 	
 	if data_frames:
 		tax_df = parse_taxonomy_data(gtdb=results.get("gtdbtk"), speci=results.get("recognise"))
+		tax_df.to_csv(f"{args.output_dir}/tax.tsv", sep="\t", index=False, na_rep="NA",)
 		df = pd.concat(data_frames)
 
 		df = pd.merge(df, tax_df, left_on="genome", right_index=True,)
