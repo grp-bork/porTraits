@@ -69,7 +69,7 @@ class PortraitsCollator:
 				fn_match = re.match(r'([0-9]+)\.(traits_from_lineage\.json|txt)', f.name)
 				if fn_match:
 					lineage_id, *ltype = fn_match.groups()
-					d.setdefault("metatraits_gtdb").setdefault(lineage_id, [None, None])[ltype[0] == "txt"] = f
+					d.setdefault("metatraits_gtdb", {}).setdefault(lineage_id, [None, None])[ltype[0] == "txt"] = f
 
 		return d
 
