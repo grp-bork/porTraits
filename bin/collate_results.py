@@ -218,7 +218,7 @@ def parse_taxonomy_data(gtdb=None, speci=None):
 	if speci:
 		for genome, files in speci.items():
 			with open(files[0], "rt") as _in:
-				tax_d.setdefault(genome, {})["speci"] = _in.read()
+				tax_d.setdefault(genome, {})["speci"] = _in.read().strip()
 
 	return pd.DataFrame(tax_d).transpose()
 
