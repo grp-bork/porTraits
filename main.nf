@@ -42,29 +42,33 @@ workflow {
 	// metaTraits
 	// recognise_out_ch.map { genome_id, speci_file -> [ genome_id, speci_file.text.replaceAll(/\n/, "") ]}
 
-	speci_ch = recognise_out_ch
-		.map { genome_id, speci_file -> speci_file.text.replaceAll(/\n/, "") }
-		.unique()
+	if (params.query_metatraits) {
 
-	metatraits_speci_call(speci_ch)
+		speci_ch = recognise_out_ch
+			.map { genome_id, speci_file -> speci_file.text.replaceAll(/\n/, "") }
+			.unique()
 
-	def lineage_id = 0
-	lineage_ch = gtdbtk_classify.out.gtdb_taxonomy
-		.map { genome_id, file -> file.text }
-		.splitCsv(header: true, sep: "\t")
-		.map { row -> row.classification }
-		.unique()
-		.map { lineage -> [ lineage, lineage_id++ ]}
-	
-	lineage_ch.dump(pretty: true, tag: "lineage_ch")
+		metatraits_speci_call(speci_ch)
 
-	metatraits_taxon_call(lineage_ch)
+		def lineage_id = 0
+		lineage_ch = gtdbtk_classify.out.gtdb_taxonomy
+			.map { genome_id, file -> file.text }
+			.splitCsv(header: true, sep: "\t")
+			.map { row -> row.classification }
+			.unique()
+			.map { lineage -> [ lineage, lineage_id++ ]}
+		
+		lineage_ch.dump(pretty: true, tag: "lineage_ch")
+
+		metatraits_taxon_call(lineage_ch)
 
 
-	all_results_ch = all_results_ch
-		.mix(metatraits_speci_call.out.metatraits)
-		.mix(metatraits_taxon_call.out.metatraits.map { lineage, lid, file -> [ lid, file ] } )
-		.mix(metatraits_taxon_call.out.lineage_info.map { lineage, lid, file -> [ lid, file ] } )
+		all_results_ch = all_results_ch
+			.mix(metatraits_speci_call.out.metatraits)
+			.mix(metatraits_taxon_call.out.metatraits.map { lineage, lid, file -> [ lid, file ] } )
+			.mix(metatraits_taxon_call.out.lineage_info.map { lineage, lid, file -> [ lid, file ] } )
+
+	}
 
 	// genomeSPOT
 	genomespot_input_ch = genomes_ch
