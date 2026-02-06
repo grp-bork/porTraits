@@ -45,7 +45,7 @@ workflow {
 	if (params.query_metatraits && params.query_metatraits != "none") {
 
 
-		if (params.query_metatraits == "NCBI") {
+		if (params.query_metatraits == "NCBI" || params.query_metatraits == "both") {
 
 			speci_ch = recognise_out_ch
 				.map { genome_id, speci_file -> speci_file.text.replaceAll(/\n/, "") }
@@ -54,7 +54,9 @@ workflow {
 			all_results_ch = all_results_ch
 				.mix(metatraits_speci_call.out.metatraits)
 
-		} else if (params.query_metatraits == "GTDB") {
+		}
+		
+		if (params.query_metatraits == "GTDB" || params.query_metatraits == "both") {
 
 			def lineage_id = 0
 			lineage_ch = gtdbtk_classify.out.gtdb_taxonomy

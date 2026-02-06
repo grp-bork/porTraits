@@ -23,8 +23,8 @@
         },
         "query_metatraits": {
           "type": "string",
-          "enum": ["none", "NCBI", "GTDB"],
-          "description": "Add metatraits results",
+          "enum": ["none", "NCBI", "GTDB", "both"],
+          "description": "Add metatraits query results.",
           "default": "none"
         },
         "recognise_marker_genes": {
