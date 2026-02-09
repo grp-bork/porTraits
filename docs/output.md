@@ -8,15 +8,15 @@ In addition, `porTraits` produces the following outputs per genome, organized in
 
 ## Directory Structure and Main Output Files
 
-- `<genome>/gtdb/`  
+- `gtdb/<genome>/gtdbtk/classify`  
   Contains GTDB-Tk taxonomy assignments.
-  - `gtdbtk.bac120.summary.tsv` or `gtdbtk.ar53.summary.tsv`: GTDB taxonomy summary for bacteria or archaea
+  - `<genome>.gtdbtk.bac120.summary.tsv` or `<genome>.gtdbtk.ar53.summary.tsv`: GTDB taxonomy summary for bacteria or archaea
 
-- `<genome>/ncbi/`
+- `ncbi/<genome>/recognise`
   Contains reCOGnise taxonomy assignments.
-  - `<genome>.specI.status.OK`: text file signifying if species assignment was successful
+  - `<genome>.cogs.txt`: text file containing the MAPseq results for specI classification
   - `<genome>.specI.status`: text file with the status of the species assignment
-  - `<genome>.specI.txt`" species (specI cluster) assignment
+  - `<genome>.specI.txt`: species (specI cluster) assignment
 
 - `<genome>/e2m/`  
   Contains KEGG and Pfam annotation matrices.
