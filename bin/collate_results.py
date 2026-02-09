@@ -322,7 +322,7 @@ def main():
 
 		df = pd.merge(df, tax_df, left_on="genome", right_index=True,)
 
-		df.sort_values(by=["category", "group1", "group2", "feature", "tool",]).to_csv(f"{args.output_dir}/concat.tsv.gz", sep="\t", index=False, na_rep="NA",)
+		df.sort_values(by=["category", "group1", "group2", "feature", "tool",]).to_csv(f"{args.output_dir}/portraits_results.tsv.gz", sep="\t", index=False, na_rep="NA",)
 
 	if results.get("metatraits_gtdb"):
 		data_frames = []
