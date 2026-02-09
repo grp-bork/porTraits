@@ -242,17 +242,19 @@ def parse_gtdb_traits(fn, lineage_fn):
 				trait_data.append(
 					(
 						trait.get("name"),
+						trait.get("num_observations"),
 						trait.get("unique_databases"),
 						trait.get("majority_label"),
 						perc_str,
 					)
 				)
 
-	names, dbs, majorities, percentages = zip(*trait_data)
+	names, obs, dbs, majorities, percentages = zip(*trait_data)
 	return pd.DataFrame(
 		{
 			"lineage": lineage,
 			"name": names,
+			"observations": obs,
    			"n_unique_databases": dbs,
 			"majority_label": majorities,
 			"percentages": percentages,
