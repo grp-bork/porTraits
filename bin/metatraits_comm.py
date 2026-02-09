@@ -26,7 +26,7 @@ def main():
         request = requests.get(url)
         d = request.json()
         taxonomy, rank, taxname = "ncbi", "species", d.get("species_name")
-        with open(f"{args.output}.tax.json", "wb") as _out:
+        with open(f"{args.output}.tax.json", "wt") as _out:
             json.dump(d, _out)
         output_fn = f"{args.output}.traits_from_speci.json"
     elif args.lineage:
