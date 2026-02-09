@@ -36,7 +36,7 @@ def main():
         if lineage:
             taxonomy, (rank, taxname) = "gtdb", lineage[-1]
             rank = {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species",}.get(rank, "species")
-        output_fn = "f{args.output}.traits_from_lineage.json"
+        output_fn = f"{args.output}.traits_from_lineage.json"
 
     if taxname is None:
         raise ValueError(f"Could not infer taxname from input {args}")
