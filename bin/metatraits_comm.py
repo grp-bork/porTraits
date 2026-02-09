@@ -43,7 +43,7 @@ def main():
     url = f"{METATRAITS_URL}/taxonomy/download"
     params = {
         # "query": re.sub(r' +', "+", name),
-        "query": name,
+        "query": taxname,
         "rank": rank,
         "taxonomy": taxonomy,
     }
