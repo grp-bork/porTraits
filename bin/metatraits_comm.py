@@ -19,11 +19,60 @@ def main():
     ap.add_argument("--output", "-o", type=str)
     args = ap.parse_args()
 
+
+    rank, taxname = None, None
+    if args.speci:
+        url = f"{METATRAITS_API_URL}/species_taxonomy/{args.speci}"
+        request = requests.get(url)
+        d = request.json()
+        taxonomy, rank, taxname = "ncbi", "species", d.get("species_name")
+    elif args.lineage:
+        lineage = [
+            item.split("__") for item in args.lineage.strip().split(";") if item[-2:] != "__"
+        ]
+        if lineage:
+            taxonomy, (rank, taxname) = "gtdb", lineage[-1]
+            rank = {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species",}.get(rank, "species")
+
+    if taxname is None:
+        raise ValueError(f"Could not infer taxname from input {args}")
+    
+    
+    
+    # https://metatraits.embl.de/taxonomy/download?query=Bacteroides+uniformis&rank=species
+    url = f"{METATRAITS_URL}/taxonomy/download"
+    params = {
+        # "query": re.sub(r' +', "+", name),
+        "query": name,
+        "rank": rank,
+        "taxonomy": taxonomy,
+    }
+    headers = {
+        # "Content-Disposition": f"attachment; filename=summary_{tax_rank}_{tax_query}.json"
+        "Content-Disposition": "inline"
+    }
+
+    request = requests.get(url, params=params, headers=headers)
+
+    with open(args.output, 'wb') as json_out:
+        if request:
+
+            print(request.url)
+            # if args.lineage:
+            #     print(request.json())
+
+            for chunk in request.iter_content(chunk_size=8192):
+                json_out.write(chunk)
+
+
+    return None
     if args.speci:
         url = f"{METATRAITS_API_URL}/species_taxonomy/{args.speci}"
         # print(url)
         request = requests.get(url)
         d = request.json()
+        #  {'species_name': 'Escherichia coli', 'species_tax_id': '562'})
+
 
         # print(d)
         url = f"{METATRAITS_API_URL}/traits/taxonomy/{d['species_tax_id']}"
