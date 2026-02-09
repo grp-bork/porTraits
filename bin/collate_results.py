@@ -70,6 +70,12 @@ class PortraitsCollator:
 				if fn_match:
 					lineage_id, *ltype = fn_match.groups()
 					d.setdefault("metatraits_gtdb", {}).setdefault(lineage_id, [None, None])[ltype[0] == "txt"] = f
+				fn_match = re.match(r'(specI_v4_[0-9]{5})\.(tax|traits_from_speci)\.json', f.name)
+				if fn_match:
+					speci, *ltype = fn_match.groups()
+					d.setdefault("metatraits_ncbi", {}).setdefault(speci, [None, None])[ltype[0] == "tax"] = f
+
+				# specI_v4_19275.tax.json  specI_v4_19275.traits_from_speci.json
 
 		return d
 
@@ -226,9 +232,7 @@ def parse_taxonomy_data(gtdb=None, speci=None):
 
 	return pd.DataFrame(tax_d).transpose()
 
-def parse_gtdb_traits(fn, lineage_fn):
-	with open(lineage_fn, "rt") as _in:
-		lineage = _in.read().strip().split("\t")[1]
+def parse_metatraits_summary(fn, lineage=None, species=None,):
 	with open(fn, "rb") as _in:
 		trait_data = []
 		for trait in json.load(_in):			
@@ -250,9 +254,16 @@ def parse_gtdb_traits(fn, lineage_fn):
 				)
 
 	names, obs, dbs, majorities, percentages = zip(*trait_data)
-	return pd.DataFrame(
+
+	d = {}
+	if lineage is not None:
+		d["lineage"] = lineage
+	elif species is not None:
+		d["species"] = species[0]
+		d["taxonomy_id"] = species[1]
+
+	d.update(
 		{
-			"lineage": lineage,
 			"name": names,
 			"observations": obs,
    			"n_unique_databases": dbs,
@@ -260,6 +271,8 @@ def parse_gtdb_traits(fn, lineage_fn):
 			"percentages": percentages,
 		}
 	)
+
+	return pd.DataFrame(d)
 
 
 
@@ -314,11 +327,31 @@ def main():
 		data_frames = []
 		# d.setdefault("metatraits_gtdb").setdefault(lineage_id, [None, None])[ltype[0] == "txt"] = f
 		for lineage_id, files in results.get("metatraits_gtdb").items():
-			data_frames.append(parse_gtdb_traits(*files))
+
+			traits_file, lineage_file = files
+			with open(lineage_file, "rt") as _in:
+				lineage = _in.read().strip().split("\t")[1]
+
+			data_frames.append(parse_metatraits_summary(traits_file, lineage=lineage,))
 
 			df = pd.concat(data_frames)
 
 			df.to_csv(f"{args.output_dir}/metatraits_gtdb.tsv.gz", sep="\t", index=False, na_rep="NA",)
+
+	if results.get("metatraits_ncbi"):
+		data_frames = []
+		for speci, files in results.get("metatraits_ncbi").items():
+
+			traits_file, species_file = files
+			with open(species_file, "rt") as _in:
+				species_d = json.load(_in)
+
+			#  {'species_name': 'Escherichia coli', 'species_tax_id': '562'})
+			data_frames.append(parse_metatraits_summary(traits_file, species=(species_d.get("species_name", "NA"), species_d.get("species_tax_id", "NA"))))
+
+			df = pd.concat(data_frames)
+
+			df.to_csv(f"{args.output_dir}/metatraits_ncbi.tsv.gz", sep="\t", index=False, na_rep="NA",)
 
 	
 
