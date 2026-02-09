@@ -39,9 +39,7 @@ workflow {
 	all_results_ch = all_results_ch
 		.mix(recognise_out_ch)
 
-	// metaTraits
-	// recognise_out_ch.map { genome_id, speci_file -> [ genome_id, speci_file.text.replaceAll(/\n/, "") ]}
-
+	// Query metatraits reference data (if required)
 	if (params.query_metatraits && params.query_metatraits != "none") {
 
 
