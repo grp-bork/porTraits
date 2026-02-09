@@ -12,12 +12,13 @@ process metatraits_speci_call {
 
 	output:
 	tuple val(speci), path("metatraits/${speci}.traits_from_speci.json"), emit: metatraits
+	tuple val(speci), path("metatraits/${speci}.tax.json"), emit: tax_info
 
 	script:
 	"""
 	mkdir -p metatraits/
 
-	metatraits_comm.py --speci ${speci} -o metatraits/${speci}.traits_from_speci.json	
+	metatraits_comm.py --speci ${speci} -o metatraits/${speci}
 	"""
 	// taxid=\$(wget -O - ${METATRAITS_URL}/species_taxonomy/${speci} 2> /dev/null | grep -o '"species_tax_id":"[0-9]\\+"' | cut -f 2 -d : | sed 's/"//g')
 	// wget -O ${genome_id}/metatraits/traits_from_speci.json ${METATRAITS_URL}/traits/taxonomy/\$taxid 2> /dev/null
@@ -41,7 +42,7 @@ process metatraits_taxon_call {
 	"""
 	mkdir -p metatraits/lineage
 
-	metatraits_comm.py --lineage '${lineage}' -o metatraits/lineage/${lineage_id}.traits_from_lineage.json
+	metatraits_comm.py --lineage '${lineage}' -o metatraits/lineage/${lineage_id}
 	printf "%s\\t%s\\n" "${lineage_id}" "${lineage}" >> metatraits/lineage/${lineage_id}.txt
 	"""
 }

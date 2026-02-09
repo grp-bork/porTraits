@@ -53,6 +53,7 @@ workflow {
 			metatraits_speci_call(speci_ch)
 			all_results_ch = all_results_ch
 				.mix(metatraits_speci_call.out.metatraits)
+				.mix(metatraits_speci_call.out.tax_info)
 
 		}
 		

@@ -26,6 +26,9 @@ def main():
         request = requests.get(url)
         d = request.json()
         taxonomy, rank, taxname = "ncbi", "species", d.get("species_name")
+        with open(f"{args.output}.tax.json", "wb") as _out:
+            json.dump(d, _out)
+        output_fn = f"{args.output}.traits_from_speci.json"
     elif args.lineage:
         lineage = [
             item.split("__") for item in args.lineage.strip().split(";") if item[-2:] != "__"
@@ -33,6 +36,7 @@ def main():
         if lineage:
             taxonomy, (rank, taxname) = "gtdb", lineage[-1]
             rank = {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species",}.get(rank, "species")
+        output_fn = "f{args.output}.traits_from_lineage.json"
 
     if taxname is None:
         raise ValueError(f"Could not infer taxname from input {args}")
@@ -54,7 +58,7 @@ def main():
 
     request = requests.get(url, params=params, headers=headers)
 
-    with open(args.output, 'wb') as json_out:
+    with open(output_fn, 'wb') as json_out:
         if request:
 
             print(request.url)
