@@ -300,7 +300,7 @@ def main():
 	data_frames = []
 	for tool, genomes in results.items():
 
-		if tool in ("metatraits_gtdb", "gtdbtk", "recognise",):
+		if tool in ("metatraits_ncbi", "metatraits_gtdb", "gtdbtk", "recognise",):
 			continue
 
 		# print(tool)
