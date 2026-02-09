@@ -7,7 +7,7 @@ process gtdbtk_classify {
     path(gtdbtk_data)
 
     output:
-    path("${genome_id}/gtdbtk") //, maxDepth: '2')
+    // path("${genome_id}/gtdbtk") //, maxDepth: '2')
     tuple val(genome_id), path("${genome_id}/gtdbtk/classify/${genome_id}.gtdbtk.*.summary.tsv"), emit: gtdb_taxonomy
 
     script:
