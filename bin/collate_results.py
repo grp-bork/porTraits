@@ -259,8 +259,9 @@ def parse_metatraits_summary(fn, lineage=None, species=None,):
 	if lineage is not None:
 		d["lineage"] = lineage
 	elif species is not None:
-		d["species"] = species[0]
-		d["taxonomy_id"] = species[1]
+		d["species"] = species[1]
+		d["taxonomy_id"] = species[2]
+		d["speci"] = species[0]
 
 	d.update(
 		{
@@ -347,7 +348,7 @@ def main():
 				species_d = json.load(_in)
 
 			#  {'species_name': 'Escherichia coli', 'species_tax_id': '562'})
-			data_frames.append(parse_metatraits_summary(traits_file, species=(species_d.get("species_name", "NA"), species_d.get("species_tax_id", "NA"))))
+			data_frames.append(parse_metatraits_summary(traits_file, species=(speci, species_d.get("species_name", "NA"), species_d.get("species_tax_id", "NA"))))
 
 			df = pd.concat(data_frames)
 
