@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import glob
 import json
 import pathlib
 import re
@@ -75,8 +74,6 @@ class PortraitsCollator:
 					speci, *ltype = fn_match.groups()
 					d.setdefault("metatraits_ncbi", {}).setdefault(speci, [None, None])[ltype[0] == "tax"] = f
 
-				# specI_v4_19275.tax.json  specI_v4_19275.traits_from_speci.json
-
 		return d
 
 	def process_predictor_outputs(self, tool, f_binary, f_prob):
@@ -86,13 +83,10 @@ class PortraitsCollator:
 		df_binary = pd.read_csv(f_binary, sep="\t", index_col=0,)
 		df_prob = pd.read_csv(f_prob, sep="\t", index_col=0, header=0, names=df_binary.columns,)
 
-		# print(df_binary)
-		# print(df_prob)
-
 		"""
 		A. for Traitar calculate 'aerotolerant' = 1- 'Anaerobe'
-B. for genomeSPOT use value, except 'oxygen' which is a bit stupid: the value is 'not tolerant' OR 'tolerant' and 'error' has the value for the probability so is never <0.5. This needs recoding with 1-probability if 'not tolerant'
-C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
+		B. for genomeSPOT use value, except 'oxygen' which is a bit stupid: the value is 'not tolerant' OR 'tolerant' and 'error' has the value for the probability so is never <0.5. This needs recoding with 1-probability if 'not tolerant'
+		C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 		"""
 
 		trait_data = []
@@ -116,7 +110,6 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 				pos_anaerobe = len(trait_data) - 1
 			elif feature == "aerotolerant":
 				pos_aerotolerant = len(trait_data) - 1
-			# print(*trait_data, sep="\n")
 
 		probabilities, binaries = df_prob.iloc[0].tolist(), df_binary.iloc[0].tolist()
 		
@@ -157,10 +150,10 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 				"trait_link": links,
 				"tool": tool,
 				"tool_version": tool_version,
-				"tool_feature": tool_features,  # df_binary.columns,
+				"tool_feature": tool_features,
 				"genome": df_binary.index[0],
-				"value_probability": probabilities,  # df_prob.iloc[0].tolist(),
-				"value_binary": binaries,  # df_binary.iloc[0].tolist(),
+				"value_probability": probabilities,
+				"value_binary": binaries,
 			}
 		)
 
@@ -211,10 +204,10 @@ C. for BacDive-AI, 'aerotolerant'  = 1-'anaerobic'
 				"trait_link": links,
 				"tool": "genomespot",
 				"tool_version": self.versions.get("genomespot"),
-				"tool_feature": df.columns,  # df_binary.columns,
+				"tool_feature": df.columns,
 				"genome": genome,
-				"value_probability": values,  # df_prob.iloc[0].tolist(),
-				"value_binary": binaries,  # df_binary.iloc[0].tolist(),
+				"value_probability": values,
+				"value_binary": binaries,
 			}
 		)
 
@@ -276,12 +269,6 @@ def parse_metatraits_summary(fn, lineage=None, species=None,):
 	return pd.DataFrame(d)
 
 
-
-
-
-
-
-
 def main():
 	ap = argparse.ArgumentParser()
 	ap.add_argument("--input_dir", "-i", type=str,)
@@ -304,20 +291,17 @@ def main():
 		if tool in ("metatraits_ncbi", "metatraits_gtdb", "gtdbtk", "recognise",):
 			continue
 
-		# print(tool)
 		if tool == "genomespot":
 			for genome, files in genomes.items():
 				data_frames.append(pc.process_genomespot_outputs(files[0], genome))
 		else:
 			for genome, files in genomes.items():
-				# print(tool, genome, files)
 				data_frames.append(pc.process_predictor_outputs(tool, files["binary"], files["prob"]))
 
 
 	if data_frames:
 		tax_df = parse_taxonomy_data(gtdb=results.get("gtdbtk"), speci=results.get("recognise"))
-		# tax_df.to_csv(f"{args.output_dir}/tax.tsv", sep="\t", index=False, na_rep="NA",)
-
+		
 		df = pd.concat(data_frames)
 
 		df = pd.merge(df, tax_df, left_on="genome", right_index=True,)
@@ -326,7 +310,6 @@ def main():
 
 	if results.get("metatraits_gtdb"):
 		data_frames = []
-		# d.setdefault("metatraits_gtdb").setdefault(lineage_id, [None, None])[ltype[0] == "txt"] = f
 		for lineage_id, files in results.get("metatraits_gtdb").items():
 
 			traits_file, lineage_file = files
@@ -347,17 +330,12 @@ def main():
 			with open(species_file, "rt") as _in:
 				species_d = json.load(_in)
 
-			#  {'species_name': 'Escherichia coli', 'species_tax_id': '562'})
 			data_frames.append(parse_metatraits_summary(traits_file, species=(speci, species_d.get("species_name", "NA"), species_d.get("species_tax_id", "NA"))))
 
 			df = pd.concat(data_frames)
 
 			df.to_csv(f"{args.output_dir}/metatraits_ncbi.tsv.gz", sep="\t", index=False, na_rep="NA",)
 
-	
-
-	
-	
 
 if __name__ == "__main__":
 	main()
