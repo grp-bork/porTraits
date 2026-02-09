@@ -1,25 +1,41 @@
 def METATRAITS_URL = "https://metatraits.embl.de/api/v1"
 
 process metatraits_speci_call {
-	// container "docker://quay.io/biocontainers/curl:7.45.0--2"
-	// container "docker://registry.git.embl.org/schudoma/portraits_metatraits:latest"
 	label "tiny"
-
+	tag "Querying metatraits for ${speci}"
 
 	input:
-	tuple val(genome_id), val(speci)
+	val(speci)
 
 	output:
-	tuple val(genome_id), path("${genome_id}/metatraits/traits_from_speci.json"), emit: metatraits
+	tuple val(speci), path("metatraits/${speci}.traits_from_speci.json"), emit: metatraits
+	tuple val(speci), path("metatraits/${speci}.tax.json"), emit: tax_info
 
 	script:
 	"""
-	mkdir -p ${genome_id}/metatraits/
+	mkdir -p metatraits/
 
-	metatraits_comm.py --speci ${speci} -o ${genome_id}/metatraits/traits_from_speci.json
+	metatraits_comm.py --speci ${speci} -o metatraits/${speci}
 	"""
-	// taxid=\$(wget -O - ${METATRAITS_URL}/species_taxonomy/${speci} 2> /dev/null | grep -o '"species_tax_id":"[0-9]\\+"' | cut -f 2 -d : | sed 's/"//g')
-	// wget -O ${genome_id}/metatraits/traits_from_speci.json ${METATRAITS_URL}/traits/taxonomy/\$taxid 2> /dev/null
-	// taxid=\$(curl -H "Accept: application/json" -H "Content-Type: application/json" -X GET ${METATRAITS_URL}/species_taxonomy/${speci} | grep -o '"species_tax_id":"[0-9]\\+"' | cut -f 2 -d : | sed 's/"//g')
-	// curl -H "Accept: application/json" -H "Content-Type: application/text" -X GET https://metatraits.embl.de/api/v1/traits/taxonomy/\$taxid -o ${genome_id}/metatraits/traits_from_speci.json
+}
+
+
+process metatraits_taxon_call {
+	label "tiny"
+	tag "Querying metatraits for ${lineage}"
+
+	input:
+	tuple val(lineage), val(lineage_id)
+
+	output:
+	tuple val(lineage), val(lineage_id), path("metatraits/lineage/*.traits_from_lineage.json"), emit: metatraits
+	tuple val(lineage), val(lineage_id), path("metatraits/lineage/${lineage_id}.txt"), emit: lineage_info
+
+	script:
+	"""
+	mkdir -p metatraits/lineage
+
+	metatraits_comm.py --lineage '${lineage}' -o metatraits/lineage/${lineage_id}
+	printf "%s\\t%s\\n" "${lineage_id}" "${lineage}" >> metatraits/lineage/${lineage_id}.txt
+	"""
 }

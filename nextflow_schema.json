@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://raw.githubusercontent.com/grp-bork/reCOGnise/main/nextflow_schema.json",
+  "$id": "https://raw.githubusercontent.com/grp-bork/porTraits/main/nextflow_schema.json",
   "title": "porTraits nextflow schema",
   "description": "porTraits predicts microbial phenotypic traits based on genomic content of input prokaryotic genomes.",
   "type": "object",
@@ -20,6 +20,12 @@
           "type": "string",
           "format": "directory-path",
           "description": "Directory path to output files"
+        },
+        "query_metatraits": {
+          "type": "string",
+          "enum": ["none", "NCBI", "GTDB", "both"],
+          "description": "Add metatraits query results.",
+          "default": "none"
         },
         "recognise_marker_genes": {
           "type": "string",
