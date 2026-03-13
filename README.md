@@ -59,6 +59,23 @@ Obtain databases required to run `porTraits` from Zenodo: [![DOI](https://zenodo
 
 The reCOGnise marker database can be downloaded from [Zenodo](https://zenodo.org/records/17916463/files/recognise_markers.tar.gz).
 
+## eggnog-mapper database
+
+`porTraits` requires the following eggnog-mapper datasets. Download and extract them to a location `/path/to/emapper_db`, which then has to be passed on to the workflow via the `--eggnog_db` parameter.
+
+```
+mkdir -p /path/to/emapper_db && cd /path/to/emapper_db
+wget http://eggnog6.embl.de/download/emapperdb-5.0.2/eggnog.db.gz
+wget http://eggnog6.embl.de/download/emapperdb-5.0.2/eggnog_proteins.dmnd.gz
+wget http://eggnog6.embl.de/download/emapperdb-5.0.2/eggnog.taxa.tar.gz
+wget http://eggnog6.embl.de/download/emapperdb-5.0.2/pfam.tar.gz
+
+gzip -dc eggnog.db.gz eggnog_proteins.dmnd.gz
+tar xvzf eggnog.taxa.tar.gz
+tar xvzf pfam.tar.gz
+```
+
+
 ---
 # Usage
 ## GUI-based Execution (CloWM)
