@@ -1,0 +1,11 @@
+url_path,views_total,views_unique
+/grp-bork/porTraits,19,11
+/grp-bork/porTraits/blob/main/config/params.yml,10,2
+/grp-bork/porTraits/tree/main/config,4,2
+/grp-bork/porTraits/blob/main/main.nf,4,1
+/grp-bork/porTraits/tree/main/assets,3,2
+/grp-bork/porTraits/tree/main/docs,3,2
+/grp-bork/porTraits/blob/main/nextflow.config,3,1
+/grp-bork/porTraits/tree/main/bin,2,2
+/grp-bork/porTraits/tree/main/portraits/modules,2,2
+/grp-bork/porTraits/blob/main/bin/collate_results.py,2,1
