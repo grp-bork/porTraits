@@ -3,7 +3,8 @@ params.recognise.marker_set = "motus"
 
 
 process recognise_genome {
-	container "oras://registry.git.embl.de/schudoma/recognise-singularity/recognise-singularity:8b158eab"
+	// container "oras://registry.git.embl.de/schudoma/recognise-singularity/recognise-singularity:8b158eab"
+	container "ghcr.io/grp-bork/recognise:v0.8.0"
 	tag "${genome_id}"
 	label "recognise"
 	label "small"
@@ -30,8 +31,7 @@ process recognise_genome {
 		ln -sf ${genome} genome_file
 	fi
 
-	recognise --marker_set ${params.recognise.marker_set} --genome genome_file --cpus ${task.cpus} --with_gff -o ${genome_id}/recognise ${genome_id} \$(readlink ${marker_genes_db})
-	
+	recognise --marker_set ${params.recognise.marker_set} --genome genome_file --cpus ${task.cpus} --with_sentinels -o ${genome_id}/recognise ${genome_id} \$(readlink ${marker_genes_db})
 	rm -fv genome_file
 	"""
 
