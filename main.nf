@@ -7,6 +7,7 @@ include { bacdive_ai } from "./portraits/modules/bacdive"
 include { traitar } from "./portraits/modules/traitar"
 include { metatraits_speci_call; metatraits_taxon_call } from "./portraits/modules/metatraits"
 include { collate_results } from "./portraits/modules/collate"
+include { publish_tarball } from "./portraits/modules/publish"
 
 
 params.file_pattern = "**.{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}"
@@ -141,5 +142,18 @@ workflow {
 		"${projectDir}/assets/versions.json"
 
 	)
+
+	all_results_ch = all_results_ch.mix(collate_results.out.portraits_table)
+	if (params.query_metatraits == "GTDB" || params.query_metatraits == "both") {
+		all_results_ch = all_results_ch.mix(collate_results.out.metatraits_gtdb)
+	}
+	if (params.query_metatraits == "NCBI" || params.query_metatraits == "both") {
+		all_results_ch = all_results_ch.mix(collate_results.out.netatraits_ncbi)
+	}
+
+
+	if (params.tarball_output) {
+		publish_tarball(all_results_ch, params.tarball_output)
+	}
 
 }
