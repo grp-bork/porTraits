@@ -14,7 +14,7 @@ process genomespot {
 	"""
 	mkdir -p ${genome_id}/genomespot/
 
-	python -m genome_spot.genome_spot \
+	python_gs -m genome_spot.genome_spot \
 	--models ${genomespot_models} \
     --contigs ${genome_fasta} \
     --proteins ${proteins} \
