@@ -1,3 +1,7 @@
+VERSION 0.2.4
+
+- CloWM-specific bugfix???
+
 VERSION 0.2.3
 
 - changed all internal dependency containers to github-hosted
