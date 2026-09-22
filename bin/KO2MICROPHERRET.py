@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/opt/conda/envs/micropherret/bin/python
 
 import os
 import sys

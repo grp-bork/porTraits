@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/opt/conda/envs/traitar_bacdive/bin/python
 
 import os
 import glob
