@@ -43,7 +43,7 @@ def main():
     
     
     # https://metatraits.embl.de/taxonomy/download?query=Bacteroides+uniformis&rank=species
-    url = f"{METATRAITS_URL}/taxonomy/download"
+    url = f"{METATRAITS_URL}/taxon/download"
     params = {
         "query": taxname,
         "rank": rank,
