@@ -12,11 +12,6 @@ include { portraits_taxonomy } from "./portraits/workflows/taxonomy"
 
 params.file_pattern = "**.{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}"
 
-genomes_ch = Channel
-				.fromPath(params.input_sheet)
-        		.splitCsv(sep: '\t', header: ["speci", "genome_id", "genome", "proteins", "genes", "gff", "emapper"])
-				.map { gdata -> [gdata.speci, gdata.genome_id, gdata] }
-
 
 workflow {
 
