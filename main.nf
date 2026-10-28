@@ -8,6 +8,7 @@ include { traitar } from "./portraits/modules/traitar"
 include { metatraits_speci_call; metatraits_taxon_call } from "./portraits/modules/metatraits"
 include { collate_results } from "./portraits/modules/collate"
 
+include { portraits_taxonomy } from "./portraits/workflows/taxonomy"
 
 params.file_pattern = "**.{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}"
 
@@ -51,7 +52,7 @@ workflow {
 
 	all_results_ch = Channel.empty()
 
-	if (params.run_taxonomy) { 
+	if (!params.skip_taxonomy) { 
 		portraits_taxonomy(genomes_ch)
 		all_results_ch = all_results_ch
 			.mix(portraits_taxonomy.out.results)
