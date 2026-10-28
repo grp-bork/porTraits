@@ -11,75 +11,57 @@ include { collate_results } from "./portraits/modules/collate"
 
 params.file_pattern = "**.{fna,fasta,fa,fna.gz,fasta.gz,fa.gz}"
 
+genomes_ch = Channel
+				.fromPath(params.input_sheet)
+        		.splitCsv(sep: '\t', header: ["speci", "genome_id", "genome", "proteins", "genes", "gff", "emapper"])
+				.map { gdata -> [gdata.speci, gdata.genome_id, gdata] }
+
 
 workflow {
 
-	genomes_ch = Channel
-        .fromPath(params.input_dir + "/" + params.file_pattern)
-        .map { fasta ->
-            def genome_id = fasta.name.replaceAll(/\.(fa(s(ta)?)?|fna)(\.gz)?$/, "")
-            return tuple(genome_id, fasta)
-        }
+	proteins_ch = Channel.empty()
+	emapper_ch = Channel.empty()
+	genomes_ch = Channel.empty()
+
+	if (params.samplesheet) {
+		data_ch = Channel
+			.fromPath(params.samplesheet)
+			.splitCsv(sep: '\t', header: [ "genome_id", "speci", "gtdbtk", "genome", "proteins", "emapper" ])
+		
+		proteins_ch = data_ch
+			.map { gdata -> [ gdata.genome_id, gdata.proteins ] }
+		
+		emapper_ch = data_ch
+			.map { gdata -> [ gdata.genome_id, gdata.emapper ] }
+			.filter { it -> it[1] != null }
+
+		genomes_ch = data_ch
+			.map { gdata -> [ gdata.genome_id, gdata.genome ] }
+
+
+	} else {
+		genomes_ch = Channel
+			.fromPath(params.input_dir + "/" + params.file_pattern)
+			.map { fasta ->
+				def genome_id = fasta.name.replaceAll(/\.(fa(s(ta)?)?|fna)(\.gz)?$/, "")
+				return tuple(genome_id, fasta)
+			}
+	}
+
 
 	all_results_ch = Channel.empty()
 
-	// GTDBtk classification	
-	gtdbtk_classify(genomes_ch, params.gtdbtk_data)
-
-	all_results_ch = all_results_ch
-		.mix(gtdbtk_classify.out.gtdb_taxonomy)
-
-	// reCOGnise classification
-	recognise_genome(genomes_ch, params.recognise_marker_genes)
-
-	recognise_out_ch = recognise_genome.out.speci_status_ok
-		.join(recognise_genome.out.genome_speci)
-		.map { genome_id, status_ok, speci_file -> [ genome_id, speci_file ] }
-
-	all_results_ch = all_results_ch
-		.mix(recognise_out_ch)
-
-	// Query metatraits reference data (if required)
-	if (params.query_metatraits && params.query_metatraits != "none") {
-
-
-		if (params.query_metatraits == "NCBI" || params.query_metatraits == "both") {
-
-			speci_ch = recognise_out_ch
-				.map { genome_id, speci_file -> speci_file.text.replaceAll(/\n/, "") }
-				.unique()
-			metatraits_speci_call(speci_ch)
-			all_results_ch = all_results_ch
-				.mix(metatraits_speci_call.out.metatraits)
-				.mix(metatraits_speci_call.out.tax_info)
-
+	if (params.run_taxonomy) { 
+		portraits_taxonomy(genomes_ch)
+		all_results_ch = all_results_ch
+			.mix(portraits_taxonomy.out.results)
+		if (!params.samplesheet) {
+			proteins_ch = portraits_taxonomy.out.proteins
 		}
-		
-		if (params.query_metatraits == "GTDB" || params.query_metatraits == "both") {
-
-			def lineage_id = 0
-			lineage_ch = gtdbtk_classify.out.gtdb_taxonomy
-				.map { genome_id, file -> file.text }
-				.splitCsv(header: true, sep: "\t")
-				.map { row -> row.classification }
-				.unique()
-				.map { lineage -> [ lineage, lineage_id++ ]}
-			
-			lineage_ch.dump(pretty: true, tag: "lineage_ch")
-
-			metatraits_taxon_call(lineage_ch)
-
-			all_results_ch = all_results_ch
-				.mix(metatraits_taxon_call.out.metatraits.map { lineage, lid, file -> [ lid, file ] } )
-				.mix(metatraits_taxon_call.out.lineage_info.map { lineage, lid, file -> [ lid, file ] } )
-
-		}
-
 	}
 
 	// genomeSPOT
-	genomespot_input_ch = genomes_ch
-		.join(recognise_genome.out.proteins, by: 0)
+	genomespot_input_ch = genomes_ch.join(proteins_ch, by: 0)
 
 	genomespot(
 		genomespot_input_ch,
@@ -89,14 +71,18 @@ workflow {
 	all_results_ch = all_results_ch
 		.mix(genomespot.out.predictions)
 
-	// emapper
-	eggnog_mapper(
-		recognise_genome.out.proteins,
-		params.eggnog_db
-	)
+	
+	if (!params.skip_emapper) {
+		// emapper
+		eggnog_mapper(
+			recognise_genome.out.proteins,
+			params.eggnog_db
+		)
+		emapper_ch = eggnog_mapper.out.eggnog
+	}
 
 	emapper2matrix(
-		eggnog_mapper.out.eggnog,
+		emapper_ch,
 		params.pfam_clade_map
 	)
 
