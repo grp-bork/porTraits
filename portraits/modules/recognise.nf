@@ -3,7 +3,6 @@ params.recognise.marker_set = "motus"
 
 
 process recognise_genome {
-	// container "oras://registry.git.embl.de/schudoma/recognise-singularity/recognise-singularity:8b158eab"
 	container "ghcr.io/grp-bork/recognise:v0.8.0"
 	tag "${genome_id}"
 	label "recognise"
