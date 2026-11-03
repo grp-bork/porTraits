@@ -1,52 +1,49 @@
 #!/usr/bin/env python3
 
-import os
 import argparse
-import pandas as pd
 import gzip
-import io
+import os
+import pathlib
+
+from collections import Counter
+
+import pandas as pd
+
+from chunk_reader import get_lines_from_chunks
+
 
 # Supported feature columns from eggNOG-mapper
-ALL_FEATURES = [
+ALL_FEATURES = {
     'eggNOG_OGs', 'COG_category', 'GOs', 'EC', 'KEGG_ko', 'KEGG_Pathway',
     'KEGG_Module', 'KEGG_Reaction', 'KEGG_rclass', 'BRITE', 'KEGG_TC',
     'CAZy', 'BiGG_Reaction', 'PFAMs'
-]
+}
 
-def read_emapper_annotations(path):
+def load_pfam_mappings(fn):
+    # Load PFAM mapping file
+    d = {}
+    with gzip.open(fn, "rt") as mf:
+        for line in mf.readlines():
+            parts = line.strip().split("\t")
+            if len(parts) >= 4:
+                pfam_accession, _, _, pfam_id = parts[:4]
+                d[pfam_id] = pfam_accession
+    return d
+
+def read_emapper_annotations(fn, features):
     """Read an eggNOG-mapper annotations file, skipping '##' lines."""
-    comp = 'gzip' if path.endswith('.gz') else None
-    with (gzip.open(path, 'rt') if comp == 'gzip' else open(path, 'r')) as f:
-        lines = [l for l in f if not l.startswith('##')]
-    df = pd.read_csv(io.StringIO(''.join(lines)), sep='\t')
-    return df
+    header = None
+    for l in get_lines_from_chunks(fn, bufsize=4_000_000):
+        if l[:2] != "##":
+            l = l.rstrip().split("\t")
+            if l[0][0] == "#":
+                header = l
+            else:
+                yield tuple((col, val) for col, val in zip(header, l) if col in features)
 
-def sample_id_from_path(path):
-    """Derive a sample identifier from the filename (before first dot)."""
-    name = os.path.basename(path)
-    return name.split('.')[0]
-
-def build_feature_counts(df, feature):
-    """Split comma-separated terms in df[feature] and count occurrences."""
-    global pfam_mapped_count, pfam_unmapped_count
-    series = df.get(feature)
-    if series is None:
-        return {}
-    counts = {}
-    for entry in series.dropna().astype(str):
-        for term in entry.split(','):
-            if not term or term == '-':
-                continue
-            if feature == 'PFAMs':
-                mapping = pfam_short_to_accession.get(term)
-                if mapping:
-                    pfam_mapped_count += 1
-                    term = mapping
-                else:
-                    pfam_unmapped_count += 1
-                    # term remains unchanged
-            counts[term] = counts.get(term, 0) + 1
-    return counts
+def sample_id_from_path(path, emapper_suffix=".emapper.annotations"):
+    """Derive a sample identifier from the filename."""
+    return os.path.basename(path).replace(".gz", "").replace(emapper_suffix, "")
 
 def main():
     parser = argparse.ArgumentParser(
@@ -57,7 +54,7 @@ def main():
         help="Paths to one or more eggNOG-mapper .emapper.annotations(.gz) files"
     )
     parser.add_argument(
-        '--features', nargs='+', choices=ALL_FEATURES,
+        '--features', 
         help="Which feature columns to parse; default=all"
     )
     parser.add_argument(
@@ -71,37 +68,36 @@ def main():
     args = parser.parse_args()
 
     # Load PFAM mapping file
-    mapping_file = args.pfam_map_file
-    global pfam_short_to_accession, pfam_mapped_count, pfam_unmapped_count
-    pfam_short_to_accession = {}
+    # global pfam_short_to_accession, pfam_mapped_count, pfam_unmapped_count
+    pfam_map = load_pfam_mappings(args.pfam_map_file)
     pfam_mapped_count = 0
     pfam_unmapped_count = 0
-    with gzip.open(mapping_file, "rt") as mf:
-        for line in mf:
-            parts = line.strip().split("\t")
-            if len(parts) >= 4:
-                pfam_accession, _, _, pfam_id = parts[:4]
-                pfam_short_to_accession[pfam_id] = pfam_accession
 
-    features = args.features if args.features else ALL_FEATURES
-    outdir = args.outdir
-    os.makedirs(outdir, exist_ok=True)
-
+    features = set(args.features.split(",")) if args.features else ALL_FEATURES
     # counts[feature][sample] = { term: count, ... }
     counts = {feat: {} for feat in features}
+
+    pathlib.Path(args.outdir).mkdir(exist_ok=True, parents=True,)
 
     for path in args.input_file:
         sample = sample_id_from_path(path)
         print(f"Processing sample: {sample}")
-        df = read_emapper_annotations(path)
-        for feat in features:
-            if feat not in df.columns:
-                print(f"  Warning: feature '{feat}' not in {path}; skipping")
-                continue
-            cnts = build_feature_counts(df, feat)
-            counts[feat][sample] = cnts
 
-    # For each feature, write term-frequency matrix
+        for annotation in read_emapper_annotations(path, features):
+            for feature, value in annotation:
+                terms = tuple(t for t in value.split(",") if t and t != "-")
+                if not terms:
+                    continue
+                if feature == "PFAMs":
+                    terms = tuple((t, pfam_map.get(t)) for t in terms)
+                    _, mapped_terms = zip(*terms)
+                    unmapped = mapped_terms.count(None)
+                    pfam_unmapped_count += unmapped
+                    pfam_mapped_count += len(terms) - unmapped
+                    terms = ((t[0] if t[1] is None else t[1]) for t in terms)
+                counts[feature].setdefault(sample, Counter()).update(terms)
+
+        # For each feature, write term-frequency matrix
     for feat in features:
         feat_counts = counts.get(feat, {})
         if not feat_counts:
@@ -122,7 +118,7 @@ def main():
                 mat.at[sample, term] = c
 
         # save counts matrix
-        out_counts = os.path.join(outdir, f"emapper.{feat}.tsv.gz")
+        out_counts = os.path.join(args.outdir, f"{sample}.emapper.{feat}.tsv.gz")
         mat.to_csv(out_counts, sep='\t', compression='gzip', index_label='sample')
         print(f"Wrote counts matrix: {out_counts}")
 
@@ -130,6 +126,7 @@ def main():
         total = pfam_mapped_count + pfam_unmapped_count
         pct = pfam_mapped_count / total * 100 if total > 0 else 0
         print(f"PFAM mapping summary: {pfam_mapped_count}/{total} mapped ({pct:.1f}%).")
+
 
 if __name__ == '__main__':
     main()
