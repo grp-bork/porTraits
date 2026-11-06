@@ -9,8 +9,6 @@ from collections import Counter
 
 import pandas as pd
 
-from chunk_reader import get_lines_from_chunks
-
 
 # Supported feature columns from eggNOG-mapper
 ALL_FEATURES = {
@@ -18,6 +16,34 @@ ALL_FEATURES = {
     'KEGG_Module', 'KEGG_Reaction', 'KEGG_rclass', 'BRITE', 'KEGG_TC',
     'CAZy', 'BiGG_Reaction', 'PFAMs'
 }
+
+def get_lines_from_chunks(f: str, bufsize: int = 800000000):
+    """
+    Provides generator access to the lines of large text files.
+    File is read chunk-wise into a buffer of the specified size.
+    Support gzip-compressed files.
+
+    inputs:
+     - f: str -- filename
+     - bufsize: int -- size of buffer
+
+    """
+    gzipped = f.endswith(".gz")
+    with (gzip.open if gzipped else open)(f, "r") as _in:
+        tail = ""
+        while 1:
+            chunk = _in.read(bufsize)
+            if gzipped:
+                chunk = chunk.decode()
+            chunk = "".join((tail, chunk))
+            if not chunk:
+                break
+            chunk = chunk.split("\n")
+            *lines, tail = chunk
+            yield from lines
+        if tail:
+            yield tail
+
 
 def load_pfam_mappings(fn):
     # Load PFAM mapping file
@@ -68,7 +94,6 @@ def main():
     args = parser.parse_args()
 
     # Load PFAM mapping file
-    # global pfam_short_to_accession, pfam_mapped_count, pfam_unmapped_count
     pfam_map = load_pfam_mappings(args.pfam_map_file)
     pfam_mapped_count = 0
     pfam_unmapped_count = 0
@@ -97,7 +122,7 @@ def main():
                     terms = ((t[0] if t[1] is None else t[1]) for t in terms)
                 counts[feature].setdefault(sample, Counter()).update(terms)
 
-        # For each feature, write term-frequency matrix
+    # For each feature, write term-frequency matrix
     for feat in features:
         feat_counts = counts.get(feat, {})
         if not feat_counts:
