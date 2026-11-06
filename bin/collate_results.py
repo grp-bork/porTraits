@@ -8,7 +8,6 @@ import re
 import pandas as pd
 
 
-
 class PortraitsCollator:
 	METATRAITS_URL = "https://metatraits.embl.de"
 
@@ -282,8 +281,7 @@ def main():
 	pc = PortraitsCollator(args)
 
 	results = pc.scan_results_dir(args.input_dir)
-	# print(results)
-
+	
 	data_frames = []
 	for tool, genomes in results.items():
 
@@ -307,15 +305,6 @@ def main():
 		df = pd.merge(df, tax_df, left_on="genome", right_index=True,)
 
 	df.sort_values(by=["category", "group1", "group2", "feature", "tool",]).to_csv(f"{args.output_dir}/portraits_results.tsv.gz", sep="\t", index=False, na_rep="NA",)
-
-	# if data_frames:
-	# 	tax_df = parse_taxonomy_data(gtdb=results.get("gtdbtk"), speci=results.get("recognise"))
-		
-	# 	df = pd.concat(data_frames)
-
-	# 	df = pd.merge(df, tax_df, left_on="genome", right_index=True,)
-
-	# 	df.sort_values(by=["category", "group1", "group2", "feature", "tool",]).to_csv(f"{args.output_dir}/portraits_results.tsv.gz", sep="\t", index=False, na_rep="NA",)
 
 	if results.get("metatraits_gtdb"):
 		data_frames = []
