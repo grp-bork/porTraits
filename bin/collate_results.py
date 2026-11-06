@@ -298,15 +298,23 @@ def main():
 			for genome, files in genomes.items():
 				data_frames.append(pc.process_predictor_outputs(tool, files["binary"], files["prob"]))
 
-
 	if data_frames:
-		tax_df = parse_taxonomy_data(gtdb=results.get("gtdbtk"), speci=results.get("recognise"))
-		
 		df = pd.concat(data_frames)
 
-		df = pd.merge(df, tax_df, left_on="genome", right_index=True,)
+		if results.get("gtdbtk") or results.get("recognise"):
+			tax_df = parse_taxonomy_data(gtdb=results.get("gtdbtk"), speci=results.get("recognise"))
+			df = pd.merge(df, tax_df, left_on="genome", right_index=True,)
 
 		df.sort_values(by=["category", "group1", "group2", "feature", "tool",]).to_csv(f"{args.output_dir}/portraits_results.tsv.gz", sep="\t", index=False, na_rep="NA",)
+
+	# if data_frames:
+	# 	tax_df = parse_taxonomy_data(gtdb=results.get("gtdbtk"), speci=results.get("recognise"))
+		
+	# 	df = pd.concat(data_frames)
+
+	# 	df = pd.merge(df, tax_df, left_on="genome", right_index=True,)
+
+	# 	df.sort_values(by=["category", "group1", "group2", "feature", "tool",]).to_csv(f"{args.output_dir}/portraits_results.tsv.gz", sep="\t", index=False, na_rep="NA",)
 
 	if results.get("metatraits_gtdb"):
 		data_frames = []
